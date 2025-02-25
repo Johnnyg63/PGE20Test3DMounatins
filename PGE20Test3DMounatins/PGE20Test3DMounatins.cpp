@@ -25,6 +25,8 @@ public:
     float fYaw = 0.0f;		// FPS Camera rotation in XZ plane
     float fTheta = 0.0f;	// Spins World transform
 
+    float fJump = 0.0f;     // Monitors jump height so we can land again
+
 
     /* Sprites */
     olc::Sprite* sprOLCPGEMobLogo = nullptr;
@@ -36,6 +38,7 @@ public:
     olc::Decal* decLandScape = nullptr;
     /* End Decals */
 
+    olc::vi2d centreScreenPos;
 
 public:
 	bool OnUserCreate() override
@@ -72,6 +75,10 @@ public:
         sprLandScape = new olc::Sprite("assets/images/MountainTest1.jpg");
         decLandScape = new olc::Decal(sprLandScape);
 
+        centreScreenPos = GetScreenSize();
+        centreScreenPos.x = centreScreenPos.x / 2;
+        centreScreenPos.y = centreScreenPos.y / 2;
+
         // Called once at the start, so create things here
 		return true;
 	}
@@ -93,7 +100,7 @@ public:
         //TODO: Add mCollision
         //mCollision.translate(0.0f, 0.0f, 0.0f);
         //matWorld = mMovement * mOffset * mCollision;
-
+               
         mYaw.rotateX(fYaw);                       // Second rotate camera Up/Down
         vf3LookDir = mYaw * vf3Target;            // Get our new direction
         vf3Target = vf3Camera + vf3LookDir;     // Set our target
@@ -135,6 +142,126 @@ public:
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
+
+
+        // Handle Camera
+          // Touch zeros (single touch) handles Camera look direction
+        if (GetMouse(0).bHeld)
+        {
+
+            // We know the Right Center point we need to compare our positions
+            // Looking Right
+            if ((float)GetMousePos().x > (((float)centreScreenPos.x / 100) * 130))
+            {
+                fTheta -= 1.0f * fElapsedTime;
+
+
+            }
+
+            // Looking Left
+            if ((float)GetMousePos().x < (((float)centreScreenPos.x / 100) * 70))
+            {
+                fTheta += 1.0f * fElapsedTime;
+
+
+            }
+
+            // Looking Up
+            if ((float)GetMousePos().y < (((float)centreScreenPos.y / 100) * 70))
+            {
+                fYaw -= 0.5f * fElapsedTime;
+                if (fYaw < -1.0f) fYaw = -1.0f;
+
+            }
+
+            // Looking Down
+            if ((float)GetMousePos().y > (((float)centreScreenPos.y / 100) * 130))
+            {
+                fYaw += 0.5f * fElapsedTime;
+                if (fYaw > 1.0f) fYaw = 1.0f;
+
+
+            }
+
+        }
+        else
+        {
+            // Move the camera back to centre, stops the dizzies!
+            if (fYaw > -0.01f && fYaw < 0.01f)
+            {
+                fYaw = 0.0f;
+            }
+            if (fYaw >= 0.01)
+            {
+                fYaw -= 0.5f * fElapsedTime;
+            }
+            if (fYaw <= -0.01)
+            {
+                fYaw += 0.5f * fElapsedTime;
+            }
+
+        }
+
+        // Handle movement
+        // Moving Forward
+        if (GetKey(olc::Key::UP).bHeld || GetMouse(1).bHeld)
+        {
+            vf3Camera.z += 8.0f * fElapsedTime;
+        }
+
+        // Moving Backward
+        if (GetKey(olc::Key::DOWN).bHeld)
+        {
+            vf3Camera.z -= 8.0f * fElapsedTime;
+        }
+
+        // Moving Left (Strife)
+        if (GetKey(olc::Key::LEFT).bHeld)
+        {
+            vf3Camera.x -= 8.0f * fElapsedTime;
+        }
+
+
+        // Moving Right (Strife)
+        if (GetKey(olc::Key::RIGHT).bHeld)
+        {
+            vf3Camera.x += 8.0f * fElapsedTime;
+        }
+             
+        
+        // Moving UP
+        if (GetKey(olc::Key::SPACE).bHeld)
+        {
+            vf3Camera.y -= 4.0f * fElapsedTime;
+            fJump -= 4.0f * fElapsedTime;
+        }
+        else
+        {
+            if (fJump > -0.01f && fJump < 0.01f)
+            {
+                fJump = 0.0f;
+                vf3Camera.y = 0.0f;
+            }
+            if (fJump >= 0.01)
+            {
+                fJump -= 4.0f * fElapsedTime;
+                vf3Camera.y -= 4.0f * fElapsedTime;
+            }
+            if (fJump <= -0.01)
+            {
+                fJump += 4.0f * fElapsedTime;
+                vf3Camera.y += 4.0f * fElapsedTime;
+            }
+        }
+
+
+        // Moving Down
+        if (GetKey(olc::Key::B).bHeld)
+        {
+            vf3Camera.y += 4.0f * fElapsedTime;
+            fJump += 4.0f * fElapsedTime;
+        }
+
 
         if (GetKey(olc::Key::ESCAPE).bPressed)
         {
