@@ -13,15 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="assets">
-      <UniqueIdentifier>{c3a65fc8-e86e-4f26-a4a1-efdb55286f3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\images">
-      <UniqueIdentifier>{ae4833ab-c6b2-45ce-8688-e133477c0fde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\objectfiles">
-      <UniqueIdentifier>{ae203ca6-3a3b-4bcd-94f3-5ec90a04fb40}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PGE20Test3DMounatins.cpp">
@@ -35,54 +26,5 @@
     <ClInclude Include="olcUTIL_Hardware3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\images\car_top.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\car_top1.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\City_Roads1_mip0.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\clay.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\dirtblock.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\ground_grass_3264_4062_Small.jpg">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\ground_grass_Small_PNG.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\MountainTest1.jpg">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\north_south_east_west_logo.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\olcpgemobilelogo.png">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\TestLandScape.jpg">
-      <Filter>assets\images</Filter>
-    </Image>
-    <Image Include="assets\images\TestLandScape_small.png">
-      <Filter>assets\images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="assets\objectfiles\mountains.obj">
-      <Filter>assets\objectfiles</Filter>
-    </Object>
-    <Object Include="assets\objectfiles\teapot.obj">
-      <Filter>assets\objectfiles</Filter>
-    </Object>
-    <Object Include="assets\objectfiles\unitcube.obj">
-      <Filter>assets\objectfiles</Filter>
-    </Object>
   </ItemGroup>
 </Project>

@@ -135,25 +135,6 @@
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="olcUTIL_Hardware3D.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\images\car_top.png" />
-    <Image Include="assets\images\car_top1.png" />
-    <Image Include="assets\images\City_Roads1_mip0.png" />
-    <Image Include="assets\images\clay.png" />
-    <Image Include="assets\images\dirtblock.png" />
-    <Image Include="assets\images\ground_grass_3264_4062_Small.jpg" />
-    <Image Include="assets\images\ground_grass_Small_PNG.png" />
-    <Image Include="assets\images\MountainTest1.jpg" />
-    <Image Include="assets\images\north_south_east_west_logo.png" />
-    <Image Include="assets\images\olcpgemobilelogo.png" />
-    <Image Include="assets\images\TestLandScape.jpg" />
-    <Image Include="assets\images\TestLandScape_small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="assets\objectfiles\mountains.obj" />
-    <Object Include="assets\objectfiles\teapot.obj" />
-    <Object Include="assets\objectfiles\unitcube.obj" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
