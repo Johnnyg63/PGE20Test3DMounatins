@@ -219,14 +219,14 @@ public:
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3Camera.x -= 8.0f * fElapsedTime;
+            vf3Camera.x += 8.0f * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3Camera.x += 8.0f * fElapsedTime;
+            vf3Camera.x -= 8.0f * fElapsedTime;
         }
              
         
