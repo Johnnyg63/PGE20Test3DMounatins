@@ -106,6 +106,7 @@ public:
         vf3Target = vf3Camera + vf3LookDir;     // Set our target
 
         matView.pointAt(vf3Camera, vf3Target, vf3Up);   // Point at our Target
+        matView.quickinvert();
 
         ClearBuffer(olc::CYAN, true);
 
@@ -280,7 +281,7 @@ int main()
 	PGE3DMountains demo;
 
 	// Lets do HD!
-	if (demo.Construct(1280, 720, 1, 1, false))
+	if (demo.Construct(1280, 720, 1, 1, true))
 		demo.Start();
 	return 0;
 }
