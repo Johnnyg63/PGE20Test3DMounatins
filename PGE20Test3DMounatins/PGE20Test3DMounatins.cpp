@@ -103,14 +103,14 @@ public:
         mMovement.translate(vf3Camera);        // first we move to the new location
         mOffset.translate(vf3Offset);     // Add our offset
         mMovement.rotateY(fTheta);             // Rotate the camera left/right
-        matWorld = mMovement * mOffset;        // Get our new view point
+        matView = mMovement * mOffset;        // Get our new view point
                       
         mYaw.rotateX(fYaw);                       // Second rotate camera Up/Down
         vf3LookDir = mYaw * vf3Target;            // Get our new direction
         vf3Target = vf3Camera + vf3LookDir;     // Set our target
 
-        matView.pointAt(vf3Camera, vf3Target, vf3Up);   // Point at our Target
-        matView.quickinvert();
+        matWorld.pointAt(vf3Camera, vf3Target, vf3Up);   // Point at our Target
+        matWorld.quickinvert();
 
         ClearBuffer(olc::CYAN, true);
 
