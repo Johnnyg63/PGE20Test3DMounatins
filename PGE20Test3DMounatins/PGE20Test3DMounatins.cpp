@@ -286,7 +286,7 @@ int main()
 	PGE3DMountains demo;
 
 	// Lets do HD!
-	if (demo.Construct(1280, 720, 1, 1, true))
+	if (demo.Construct(1280, 720, 1, 1, false))
 		demo.Start();
 	return 0;
 }
