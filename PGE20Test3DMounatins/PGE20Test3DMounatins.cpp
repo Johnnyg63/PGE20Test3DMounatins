@@ -17,16 +17,16 @@ public:
     olc::mf4d matProject;
     olc::utils::hw3d::mesh meshMountain;
    
-    olc::vf3d vf3Up = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3Camera = { 0.0f, 0.0f, 0.0f };     // vf3d camera direction
-    olc::vf3d vf3LookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
-    olc::vf3d vf3Forward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3Offset = { 0.0f, -10.0f, 0.0f };   // vf3d Offset
+    olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
+    olc::vf3d vf3dCamera = { 0.0f, 0.0f, 0.0f };     // vf3d camera direction
+    olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
+    olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
+    olc::vf3d vf3dOffset = { 0.0f, -10.0f, 0.0f };   // vf3d Offset
 
     float fYaw = 0.0f;		// FPS Camera rotation in X plane
-    float fYawRoC = 0.5f;	// fYaw Rate of Change
+    float fYawRoC = 1.0f;	// fYaw Rate of Change
     float fTheta = 0.0f;	// Spins World transform
-    float fThetaRoC = 0.5f;	// fTheta Rate of Change
+    float fThetaRoC = 1.5f;	// fTheta Rate of Change
 
     float fJump = 0.0f;     // Monitors jump height so we can land again
     float fJumpRoC = 4.0f;	// fTheta Rate of Change
@@ -94,23 +94,39 @@ public:
 	{
         SetDrawTarget(nullptr);
 
-      
+             
         // New code:
-        olc::vf3d  vf3Target = { 0,0,1 };
+        olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
+        olc::mf4d mTrans, matCameraRot, matCamera;
+        olc::mf4d mPosition, mCollision;
 
-        olc::mf4d mMovement, mYaw, mOffset, mCollision;
+        //fTheta += 1.0f * fElapsedTime; // Uncomment to spin me right round baby right round
 
-        mMovement.translate(vf3Camera);        // first we move to the new location
-        mOffset.translate(vf3Offset);     // Add our offset
-        mMovement.rotateY(fTheta);             // Rotate the camera left/right
-        matView = mMovement * mOffset;        // Get our new view point
-                      
-        mYaw.rotateX(fYaw);                       // Second rotate camera Up/Down
-        vf3LookDir = mYaw * vf3Target;            // Get our new direction
-        vf3Target = vf3Camera + vf3LookDir;     // Set our target
+        // Update rotation
+        mRotationY.rotateY(fTheta);
+        //mRotationZ.rotateZ(fTheta * 0.5f);
 
-        matWorld.pointAt(vf3Camera, vf3Target, vf3Up);   // Point at our Target
-        matWorld.quickinvert();
+        // Update trans
+        mPosition.translate(vf3dCamera);
+        mTrans.translate(vf3dOffset);
+        matWorld.identity();
+        matWorld = mRotationZ * mRotationY;
+        matWorld = matWorld * mPosition * mTrans;
+
+
+        // Create a "Point At"
+        olc::vf3d vf3dTarget = { 0,0,1 };
+       
+        matCameraRot.rotateX(fYaw);
+
+        vf3dLookDir = matCameraRot * vf3dTarget;
+        vf3dTarget = vf3dCamera + vf3dLookDir;
+        matView.pointAt(vf3dCamera, vf3dTarget, vf3dUp);
+        matView.quickinvert();
+
+
+        // Manage forward / backwards
+        vf3dForward = vf3dLookDir * (8.0f * fElapsedTime);
 
         ClearBuffer(olc::CYAN, true);
 
@@ -134,11 +150,9 @@ public:
             meshMountain.col[i + 2] = olc::PixelF(illum, illum, illum, 1.0f);
         }
 
-
         HW3D_DrawLine((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
         HW3D_DrawLineBox((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
-
 
         HW3D_DrawObject((matView * matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
@@ -148,9 +162,8 @@ public:
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
 
-
         // Handle Camera
-          // Touch zeros (single touch) handles Camera look direction
+         // Touch zeros (single touch) handles Camera look direction
         if (GetMouse(0).bHeld)
         {
 
@@ -185,7 +198,6 @@ public:
                 fYaw += fYawRoC * fElapsedTime;
                 if (fYaw > 1.0f) fYaw = 1.0f;
 
-
             }
 
         }
@@ -199,10 +211,12 @@ public:
             if (fYaw >= 0.01)
             {
                 fYaw -= fYawRoC * fElapsedTime;
+
             }
             if (fYaw <= -0.01)
             {
                 fYaw += fYawRoC * fElapsedTime;
+               
             }
 
         }
@@ -211,51 +225,54 @@ public:
         // Moving Forward
         if (GetKey(olc::Key::UP).bHeld || GetMouse(1).bHeld)
         {
-            vf3Camera.z += 8.0f * fElapsedTime;
+            //vCamera.z += 8.0f * fElapsedTime;
+            vf3dCamera += vf3dForward;
         }
 
         // Moving Backward
         if (GetKey(olc::Key::DOWN).bHeld)
         {
-            vf3Camera.z -= 8.0f * fElapsedTime;
+            //vCamera.z -= 8.0f * fElapsedTime;
+            vf3dCamera -= vf3dForward;
         }
 
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3Camera.x += 8.0f * fElapsedTime;
+            //TODO
+            //vCamera.x += 8.0f * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3Camera.x -= 8.0f * fElapsedTime;
+            //vCamera.x -= 8.0f * fElapsedTime;
         }
-             
-        
+
+
         // Moving UP
         if (GetKey(olc::Key::SPACE).bHeld)
         {
             fJump -= fJumpRoC * fElapsedTime;
-            vf3Camera.y = fJump;
+            vf3dCamera.y = fJump;
         }
         else
         {
             if (fJump > -0.01f && fJump < 0.01f)
             {
                 fJump = 0.0f;
-                vf3Camera.y = fJump;
+                vf3dCamera.y = fJump;
             }
             if (fJump >= 0.01)
             {
                 fJump -= 4.0f * fElapsedTime;
-                vf3Camera.y = fJump;
+                vf3dCamera.y = fJump;
             }
             if (fJump <= -0.01)
             {
                 fJump += 4.0f * fElapsedTime;
-                vf3Camera.y = fJump;
+                vf3dCamera.y = fJump;
             }
         }
 
@@ -264,7 +281,7 @@ public:
         if (GetKey(olc::Key::B).bHeld)
         {
             fJump += 4.0f * fElapsedTime;
-            vf3Camera.y = fJump;
+            vf3dCamera.y = fJump;
             // TODO: add condition code to stop down movement when jump = 0
         }
 
@@ -277,6 +294,9 @@ public:
         {
             return true;
         }
+
+
+       
 		
 	}
 };
