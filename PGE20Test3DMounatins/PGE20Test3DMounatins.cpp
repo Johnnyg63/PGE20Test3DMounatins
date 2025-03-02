@@ -110,9 +110,8 @@ public:
         mPosition.translate(vf3dCamera);
         mTrans.translate(vf3dOffset);
         matWorld.identity();
-        matWorld = mRotationZ * mRotationY;
-        matWorld = matWorld * mPosition * mTrans;
-
+        matWorld = mPosition * mTrans;
+        matWorld = matWorld * mRotationY;
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -225,14 +224,14 @@ public:
         // Moving Forward
         if (GetKey(olc::Key::UP).bHeld || GetMouse(1).bHeld)
         {
-            //vCamera.z += 8.0f * fElapsedTime;
+            //vf3dCamera.z += 8.0f * fElapsedTime;
             vf3dCamera += vf3dForward;
         }
 
         // Moving Backward
         if (GetKey(olc::Key::DOWN).bHeld)
         {
-            //vCamera.z -= 8.0f * fElapsedTime;
+            //vf3dCamera.z -= 8.0f * fElapsedTime;
             vf3dCamera -= vf3dForward;
         }
 
