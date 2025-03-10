@@ -121,7 +121,7 @@ public:
         vf3dLookDir = matCameraRot * vf3dTarget;
         vf3dTarget = vf3dCamera + vf3dLookDir;
         matView.pointAt(vf3dCamera, vf3dTarget, vf3dUp);
-        matView.quickinvert();
+        //matView.quickinvert();
 
 
         // Manage forward / backwards
@@ -239,14 +239,14 @@ public:
         if (GetKey(olc::Key::LEFT).bHeld)
         {
             //TODO
-            //vCamera.x += 8.0f * fElapsedTime;
+            vf3dCamera.x += 8.0f * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            //vCamera.x -= 8.0f * fElapsedTime;
+            vf3dCamera.x -= 8.0f * fElapsedTime;
         }
 
 
