@@ -27,6 +27,8 @@ public:
     float fYawRoC = 1.0f;	// fYaw Rate of Change
     float fTheta = 0.0f;	// Spins World transform
     float fThetaRoC = 1.5f;	// fTheta Rate of Change
+    float fStrifeRoC = 25.0f; // Strife Rate of Change, thanks: #Boguslavv
+
 
     float fJump = vf3dOffset.y;     // Monitors jump height so we can land again
     float fJumpRoC = 4.0f;	// fTheta Rate of Change
@@ -230,15 +232,17 @@ public:
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            //TODO
-            vf3dCamera.x -= 8.0f * fElapsedTime;
+            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x += 8.0f * fElapsedTime;
+            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
+
         }
 
 
