@@ -18,17 +18,17 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 0.0f, 0.0f, 0.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { 0.0f, 30.0f, 0.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 0.0f, -10.0f, 0.0f };   // vf3d Offset
+    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };   // vf3d Offset
 
     float fYaw = 0.0f;		// FPS Camera rotation in X plane
     float fYawRoC = 1.0f;	// fYaw Rate of Change
     float fTheta = 0.0f;	// Spins World transform
     float fThetaRoC = 1.5f;	// fTheta Rate of Change
 
-    float fJump = 0.0f;     // Monitors jump height so we can land again
+    float fJump = vf3dOffset.y;     // Monitors jump height so we can land again
     float fJumpRoC = 4.0f;	// fTheta Rate of Change
 
 
@@ -103,15 +103,15 @@ public:
         //fTheta += 1.0f * fElapsedTime; // Uncomment to spin me right round baby right round
 
         // Update rotation
-        mRotationY.rotateY(fTheta);
+        //mRotationY.rotateY(fTheta);
         //mRotationZ.rotateZ(fTheta * 0.5f);
 
         // Update trans
-        mPosition.translate(vf3dCamera);
+       /* mPosition.translate(vf3dCamera);
         mTrans.translate(vf3dOffset);
         matWorld.identity();
         matWorld = mPosition * mTrans;
-        matWorld = matWorld * mRotationY;
+        matWorld = matWorld * mRotationY;*/
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -120,7 +120,14 @@ public:
 
         vf3dLookDir = matCameraRot * vf3dTarget;
         vf3dTarget = vf3dCamera + vf3dLookDir;
-        matView.pointAt(vf3dCamera, vf3dTarget, vf3dUp);
+
+        Cam3D.SetPosition(vf3dCamera);
+        Cam3D.SetTarget(vf3dTarget);
+        Cam3D.Update();
+        //matView.clear();
+        matWorld = Cam3D.GetViewMatrix();
+
+        //matView.pointAt(vf3dCamera, vf3dTarget, vf3dUp);
         //matView.quickinvert();
 
 
@@ -186,16 +193,17 @@ public:
             // Looking Up
             if ((float)GetMousePos().y < (((float)centreScreenPos.y / 100) * 70))
             {
-                fYaw -= fYawRoC * fElapsedTime;
-                if (fYaw < -1.0f) fYaw = -1.0f;
+                fYaw += fYawRoC * fElapsedTime;
+                if (fYaw > 1.0f) fYaw = 1.0f;
+                
 
             }
 
             // Looking Down
             if ((float)GetMousePos().y > (((float)centreScreenPos.y / 100) * 130))
             {
-                fYaw += fYawRoC * fElapsedTime;
-                if (fYaw > 1.0f) fYaw = 1.0f;
+                fYaw -= fYawRoC * fElapsedTime;
+                if (fYaw < -1.0f) fYaw = -1.0f;
 
             }
 
@@ -225,50 +233,50 @@ public:
         if (GetKey(olc::Key::UP).bHeld || GetMouse(1).bHeld)
         {
             //vf3dCamera.z += 8.0f * fElapsedTime;
-            vf3dCamera += vf3dForward;
+            vf3dCamera -= vf3dForward;
         }
 
         // Moving Backward
         if (GetKey(olc::Key::DOWN).bHeld)
         {
             //vf3dCamera.z -= 8.0f * fElapsedTime;
-            vf3dCamera -= vf3dForward;
+            vf3dCamera += vf3dForward;
         }
 
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
             //TODO
-            vf3dCamera.x += 8.0f * fElapsedTime;
+            vf3dCamera.x -= 8.0f * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x -= 8.0f * fElapsedTime;
+            vf3dCamera.x += 8.0f * fElapsedTime;
         }
 
 
         // Moving UP
         if (GetKey(olc::Key::SPACE).bHeld)
         {
-            fJump -= fJumpRoC * fElapsedTime;
+            fJump += fJumpRoC * fElapsedTime;
             vf3dCamera.y = fJump;
         }
         else
         {
-            if (fJump > -0.01f && fJump < 0.01f)
+            if (fJump > (vf3dOffset.y - 0.01f) && fJump < (vf3dOffset.y + 0.01f))
             {
-                fJump = 0.0f;
+                fJump = vf3dOffset.y;
                 vf3dCamera.y = fJump;
             }
-            if (fJump >= 0.01)
+            if (fJump >= (vf3dOffset.y + 0.01))
             {
                 fJump -= 4.0f * fElapsedTime;
                 vf3dCamera.y = fJump;
             }
-            if (fJump <= -0.01)
+            if (fJump <= (vf3dOffset.y - 0.01))
             {
                 fJump += 4.0f * fElapsedTime;
                 vf3dCamera.y = fJump;
