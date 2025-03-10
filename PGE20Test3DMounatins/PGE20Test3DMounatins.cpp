@@ -100,36 +100,20 @@ public:
         olc::mf4d mTrans, matCameraRot, matCamera;
         olc::mf4d mPosition, mCollision;
 
-        //fTheta += 1.0f * fElapsedTime; // Uncomment to spin me right round baby right round
-
-        // Update rotation
-        //mRotationY.rotateY(fTheta);
-        //mRotationZ.rotateZ(fTheta * 0.5f);
-
-        // Update trans
-       /* mPosition.translate(vf3dCamera);
-        mTrans.translate(vf3dOffset);
-        matWorld.identity();
-        matWorld = mPosition * mTrans;
-        matWorld = matWorld * mRotationY;*/
-
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
        
-        matCameraRot.rotateX(fYaw);
+        mRotationY.rotateY(fTheta);  // Left/Right
+        mRotationX.rotateX(fYaw);    // Up/Down
 
-        vf3dLookDir = matCameraRot * vf3dTarget;
+        vf3dLookDir = mRotationY * mRotationX * vf3dTarget;   // Left-Right * Up-Down
         vf3dTarget = vf3dCamera + vf3dLookDir;
+        
 
         Cam3D.SetPosition(vf3dCamera);
         Cam3D.SetTarget(vf3dTarget);
         Cam3D.Update();
-        //matView.clear();
         matWorld = Cam3D.GetViewMatrix();
-
-        //matView.pointAt(vf3dCamera, vf3dTarget, vf3dUp);
-        //matView.quickinvert();
-
 
         // Manage forward / backwards
         vf3dForward = vf3dLookDir * (8.0f * fElapsedTime);
@@ -156,11 +140,11 @@ public:
             meshMountain.col[i + 2] = olc::PixelF(illum, illum, illum, 1.0f);
         }
 
-        HW3D_DrawLine((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
+        HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
-        HW3D_DrawLineBox((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
+        HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject((matView * matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
      
         // End new code
@@ -177,7 +161,7 @@ public:
             // Looking Right
             if ((float)GetMousePos().x > (((float)centreScreenPos.x / 100) * 130))
             {
-                fTheta -= fThetaRoC * fElapsedTime;
+                fTheta += fThetaRoC * fElapsedTime;
 
 
             }
@@ -185,7 +169,7 @@ public:
             // Looking Left
             if ((float)GetMousePos().x < (((float)centreScreenPos.x / 100) * 70))
             {
-                fTheta += fThetaRoC * fElapsedTime;
+                fTheta -= fThetaRoC * fElapsedTime;
 
 
             }
