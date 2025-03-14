@@ -48,11 +48,10 @@ public:
     std::vector<std::string> vecMessages;
     /* END Vectors*/
 
-    /* Intergets for displaying messages*/
+    /* vars for displaying messages*/
     uint32_t nFrameCount = 0;
     float fStep = 20;
     olc::vf2d vf2MessPos = { 10.0f, 10.0f };
-
 
 
     /* End Messages */
