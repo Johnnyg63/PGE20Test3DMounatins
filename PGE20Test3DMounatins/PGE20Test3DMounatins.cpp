@@ -44,6 +44,18 @@ public:
     olc::Decal* decLandScape = nullptr;
     /* End Decals */
 
+    /* Vectors */
+    std::vector<std::string> vecMessages;
+    /* END Vectors*/
+
+    /* Intergets for displaying messages*/
+    uint32_t nFrameCount = 0;
+    float fStep = 20;
+    olc::vf2d vf2MessPos = { 10.0f, 10.0f };
+
+
+
+    /* End Messages */
     olc::vi2d centreScreenPos;
 
     // 3D Camera
@@ -280,6 +292,8 @@ public:
             // TODO: add condition code to stop down movement when jump = 0
         }
 
+        // Display Messages
+        DisplayMessages();
 
         if (GetKey(olc::Key::ESCAPE).bPressed)
         {
@@ -290,10 +304,38 @@ public:
             return true;
         }
 
-
+       
        
 		
 	}
+
+    /*
+    * Displays messages on the screen
+    */
+    void DisplayMessages()
+    {
+        nFrameCount = GetFPS();
+
+        std::string sMessage = "OneLoneCoder.com";
+        vecMessages.push_back(sMessage);
+
+        sMessage = sAppName + " - FPS: " + std::to_string(nFrameCount);
+        vecMessages.push_back(sMessage);
+
+        sMessage = "---";
+        vecMessages.push_back(sMessage);
+
+        fStep = 10;
+        vf2MessPos.y = fStep;
+        for (auto& s : vecMessages)
+        {
+            DrawStringDecal(vf2MessPos, s);
+            vf2MessPos.y += fStep;
+        }
+        vecMessages.clear();
+
+
+    }
 };
 
 int main()
