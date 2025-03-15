@@ -23,7 +23,8 @@ public:
     olc::vf3d vf3dCamera = { 0.0f, 30.0f, 0.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };   // vf3d Offset
+    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
+    olc::vf3d vf3dSunLocation = { 1.0f, 1.0f, 1.0f };   // vf3d Sun Location
 
     float fYaw = 0.0f;		// FPS Camera rotation in X plane
     float fYawRoC = 1.0f;	// fYaw Rate of Change
@@ -147,9 +148,9 @@ public:
 
             olc::vf3d vCross = olc::vf3d(p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]).cross(olc::vf3d(p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2])).norm();
 
-            olc::vf3d vLight = olc::vf3d(1.0f, 1.0f, 1.0f).norm();
+            olc::vf3d vLight = vf3dSunLocation.norm();
 
-            float illum = std::clamp(vCross.dot(vLight), 0.0f, 1.0f) * 0.6f + 0.4f;
+            float illum = std::clamp(vCross.dot(vf3dSunLocation), 0.0f, 1.0f) * 0.6f + 0.4f;
             meshMountain.col[i + 0] = olc::PixelF(illum, illum, illum, 1.0f);
             meshMountain.col[i + 1] = olc::PixelF(illum, illum, illum, 1.0f);
             meshMountain.col[i + 2] = olc::PixelF(illum, illum, illum, 1.0f);
@@ -293,6 +294,14 @@ public:
             // TODO: add condition code to stop down movement when jump = 0
         }
 
+
+        // Set Sun Location
+        if(GetKey(olc::Key::S).bHeld)
+        {
+            vf3dSunLocation.x = float(GetMouseX());
+            vf3dSunLocation.y = float(GetMouseY());
+        }
+
         // Display Messages
         DisplayMessages();
 
@@ -322,6 +331,14 @@ public:
 
         sMessage = sAppName + " - FPS: " + std::to_string(nFrameCount);
         vecMessages.push_back(sMessage);
+
+        sMessage = "Sun X: " + std::to_string(vf3dSunLocation.x);
+        vecMessages.push_back(sMessage);
+        sMessage = "Sun Y: " + std::to_string(vf3dSunLocation.y);
+        vecMessages.push_back(sMessage);
+        sMessage = "Sun Z: " + std::to_string(vf3dSunLocation.z);
+        vecMessages.push_back(sMessage);
+
 
         sMessage = "---";
         vecMessages.push_back(sMessage);
