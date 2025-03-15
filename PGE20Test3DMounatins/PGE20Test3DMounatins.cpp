@@ -20,10 +20,10 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 0.0f, 30.0f, 0.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { 0.0f, 100.0f, 0.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
+    olc::vf3d vf3dOffset = { 0.0f, 100.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 1.0f, 1.0f, 1.0f };   // vf3d Sun Location
 
     float fYaw = 0.0f;		// FPS Camera rotation in X plane
@@ -34,7 +34,7 @@ public:
 
 
     float fJump = vf3dOffset.y;     // Monitors jump height so we can land again
-    float fJumpRoC = 4.0f;	// fTheta Rate of Change
+    float fJumpRoC = 25.0f;	// fTheta Rate of Change
 
 
     /* Sprites */
@@ -79,7 +79,7 @@ public:
         matWorld.identity();
         matView.identity();
 
-        auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/mountains.obj");
+        auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/SuperPlane.obj");
         if (t.has_value())
         {
             meshMountain = *t;
@@ -95,7 +95,7 @@ public:
         sprOLCPGEMobLogo = new olc::Sprite("assets/images/olcpgemobilelogo.png");
         decOLCPGEMobLogo = new olc::Decal(sprOLCPGEMobLogo);
 
-        sprLandScape = new olc::Sprite("assets/images/MountainTest1.jpg");
+        sprLandScape = new olc::Sprite("assets/images/testsea.png");
         decLandScape = new olc::Decal(sprLandScape);
 
         centreScreenPos = GetScreenSize();
@@ -289,7 +289,7 @@ public:
         // Moving Down
         if (GetKey(olc::Key::B).bHeld)
         {
-            fJump += 4.0f * fElapsedTime;
+            fJump -= fJumpRoC * fElapsedTime;
             vf3dCamera.y = fJump;
             // TODO: add condition code to stop down movement when jump = 0
         }
