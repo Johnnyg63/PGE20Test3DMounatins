@@ -1,3 +1,5 @@
+
+#define OLC_GFX_OPENGL33
 #define OLC_PGE_APPLICATION
 #include "olcUTIL_Hardware3D.h"
 #include "olcPixelGameEngine.h"
