@@ -20,10 +20,10 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 0.0f, 100.0f, 0.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { 0.0f, 10.0f, 0.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 0.0f, 100.0f, 0.0f };       // vf3d Offset
+    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 1.0f, 1.0f, 1.0f };   // vf3d Sun Location
 
     float fYaw = 0.0f;		// FPS Camera rotation in X plane
@@ -67,19 +67,18 @@ public:
 	bool OnUserCreate() override
 	{
         float fAspect = float(GetScreenSize().y) / float(GetScreenSize().x);
-        float S = 1.0f / (tan(3.14159f * 0.25f));
-        float f = 1000.0f;
-        float n = 0.1f;
+        float fFieldOfView = 1.0f / (tan(3.14159f * 0.25f));
+        float fFar = 1000.0f;
+        float fNear = 0.1f;
 
-        matProject(0, 0) = fAspect; matProject(0, 1) = 0.0f; matProject(0, 2) = 0.0f;	              matProject(0, 3) = 0.0f;
-        matProject(1, 0) = 0.0f;    matProject(1, 1) = 1;    matProject(1, 2) = 0.0f;                 matProject(1, 3) = 0.0f;
-        matProject(2, 0) = 0.0f;    matProject(2, 1) = 0.0f; matProject(2, 2) = -(f / (f - n));       matProject(2, 3) = -1.0f;
-        matProject(3, 0) = 0.0f;    matProject(3, 1) = 0.0f; matProject(3, 2) = -((f * n) / (f - n)); matProject(3, 3) = 0.0f;
+        Cam3D.SetAspectRatio(fAspect);
+        Cam3D.SetClippingPlanes(fNear, fFar);
+        Cam3D.SetFieldOfView(fFieldOfView);
 
         matWorld.identity();
         matView.identity();
 
-        auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/SuperPlane.obj");
+        auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/mountains.obj");
         if (t.has_value())
         {
             meshMountain = *t;
@@ -95,7 +94,7 @@ public:
         sprOLCPGEMobLogo = new olc::Sprite("assets/images/olcpgemobilelogo.png");
         decOLCPGEMobLogo = new olc::Decal(sprOLCPGEMobLogo);
 
-        sprLandScape = new olc::Sprite("assets/images/testsea.png");
+        sprLandScape = new olc::Sprite("assets/images/MountainTest1.jpg");
         decLandScape = new olc::Decal(sprLandScape);
 
         centreScreenPos = GetScreenSize();
@@ -137,7 +136,7 @@ public:
         ClearBuffer(olc::CYAN, true);
 
 
-        HW3D_Projection(matProject.m);
+        HW3D_Projection(Cam3D.GetProjectionMatrix().m);
 
         // Lighting
         for (size_t i = 0; i < meshMountain.pos.size(); i += 3)
@@ -177,7 +176,7 @@ public:
             // Looking Right
             if ((float)GetMousePos().x > (((float)centreScreenPos.x / 100) * 130))
             {
-                fTheta += fThetaRoC * fElapsedTime;
+                fTheta -= fThetaRoC * fElapsedTime;
 
 
             }
@@ -185,7 +184,7 @@ public:
             // Looking Left
             if ((float)GetMousePos().x < (((float)centreScreenPos.x / 100) * 70))
             {
-                fTheta -= fThetaRoC * fElapsedTime;
+                fTheta += fThetaRoC * fElapsedTime;
 
 
             }
@@ -246,16 +245,16 @@ public:
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
 
         }
 
@@ -291,7 +290,7 @@ public:
         {
             fJump -= fJumpRoC * fElapsedTime;
             vf3dCamera.y = fJump;
-            // TODO: add condition code to stop down movement when jump = 0
+           
         }
 
 
