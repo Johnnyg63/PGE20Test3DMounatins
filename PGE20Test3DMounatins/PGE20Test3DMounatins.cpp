@@ -65,6 +65,10 @@ public:
     // 3D Camera
     olc::utils::hw3d::Camera3D Cam3D;
 
+
+    // Skydomes et Al
+
+
 public:
 	bool OnUserCreate() override
 	{
