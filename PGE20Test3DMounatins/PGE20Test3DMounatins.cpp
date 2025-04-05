@@ -3,6 +3,7 @@
 #define OLC_PGE_APPLICATION
 #include "olcUTIL_Hardware3D.h"
 #include "olcPixelGameEngine.h"
+#include <immintrin.h> // For AVX/SSE
 
 // Override base class with your custom functionality
 class PGE3DMountains : public olc::PixelGameEngine
@@ -24,17 +25,18 @@ public:
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
-    olc::vf3d vf3dSunLocation = { 1.0f, 1.0f, 1.0f };   // vf3d Sun Location
+    olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    float fYaw = 0.0f;		// FPS Camera rotation in X plane
-    float fYawRoC = 1.0f;	// fYaw Rate of Change
-    float fTheta = 0.0f;	// Spins World transform
-    float fThetaRoC = 1.5f;	// fTheta Rate of Change
-    float fStrifeRoC = 25.0f; // Strife Rate of Change, thanks: #Boguslavv
+    float fYaw = 0.0f;		    // FPS Camera rotation in X plane
+    float fYawRoC = 1.0f;	    // fYaw Rate of Change Look Up/Down 
+    float fTheta = 0.0f;	    // Spins World transform
+    float fThetaRoC = 1.5f;	    // fTheta Rate of Change Spin Left/Right
+    float fStrifeRoC = 2.5f;    // Strife Rate of Change, thanks: #Boguslavv
+    float fForwardRoC = 8.0f;   // Forward/Backwards Rate of Change
 
 
     float fJump = vf3dOffset.y;     // Monitors jump height so we can land again
-    float fJumpRoC = 25.0f;	// fTheta Rate of Change
+    float fJumpRoC = 4.0f;	// fTheta Rate of Change
 
 
     /* Sprites */
@@ -108,7 +110,6 @@ public:
 	bool OnUserUpdate(float fElapsedTime) override
 	{
         SetDrawTarget(nullptr);
-
              
         // New code:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
@@ -131,14 +132,13 @@ public:
         matWorld = Cam3D.GetViewMatrix();
 
         // Manage forward / backwards
-        vf3dForward = vf3dLookDir * (8.0f * fElapsedTime);
-
-        ClearBuffer(olc::CYAN, true);
-
+        vf3dForward = vf3dLookDir * (fForwardRoC * fElapsedTime);
 
         HW3D_Projection(Cam3D.GetProjectionMatrix().m);
 
         // Lighting
+        olc::vf3d vLight = vf3dSunLocation.norm();
+        olc::Pixel pixIllum;
         for (size_t i = 0; i < meshMountain.pos.size(); i += 3)
         {
             const auto& p0 = meshMountain.pos[i + 0];
@@ -147,12 +147,11 @@ public:
 
             olc::vf3d vCross = olc::vf3d(p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]).cross(olc::vf3d(p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2])).norm();
 
-            olc::vf3d vLight = vf3dSunLocation.norm();
-
-            float illum = std::clamp(vCross.dot(vf3dSunLocation), 0.0f, 1.0f) * 0.6f + 0.4f;
-            meshMountain.col[i + 0] = olc::PixelF(illum, illum, illum, 1.0f);
-            meshMountain.col[i + 1] = olc::PixelF(illum, illum, illum, 1.0f);
-            meshMountain.col[i + 2] = olc::PixelF(illum, illum, illum, 1.0f);
+            float illum = std::clamp(vCross.dot(vLight), 0.0f, 1.0f) * 0.6f + 0.4f;
+            pixIllum = olc::PixelF(illum, illum, illum, 1.0f);
+            meshMountain.col[i + 0] = pixIllum;
+            meshMountain.col[i + 1] = pixIllum;
+            meshMountain.col[i + 2] = pixIllum;
         }
 
         HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
@@ -161,14 +160,37 @@ public:
 
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
-     
-        // End new code
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
 
+        UpdateCamByUserInput(fElapsedTime);
+
+        // Display Messages
+        DisplayMessages();
+
+        if (GetKey(olc::Key::ESCAPE).bPressed)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+       
+       
+		
+	}
+
+    /*
+    * Updates the cam position by user input
+    * Mouse/Touch/Keyboard
+    */
+    void UpdateCamByUserInput(float fElapsedTime)
+    {
         // Handle Camera
-         // Touch zeros (single touch) handles Camera look direction
+        // Touch zeros (single touch) handles Camera look direction
         if (GetMouse(0).bHeld)
         {
 
@@ -194,7 +216,7 @@ public:
             {
                 fYaw += fYawRoC * fElapsedTime;
                 if (fYaw > 1.0f) fYaw = 1.0f;
-                
+
 
             }
 
@@ -222,7 +244,7 @@ public:
             if (fYaw <= -0.01)
             {
                 fYaw += fYawRoC * fElapsedTime;
-               
+
             }
 
         }
@@ -265,6 +287,12 @@ public:
             fJump += fJumpRoC * fElapsedTime;
             vf3dCamera.y = fJump;
         }
+        else if (GetKey(olc::Key::B).bHeld)
+        {
+            fJump -= fJumpRoC * fElapsedTime;
+            vf3dCamera.y = fJump;
+
+        }
         else
         {
             if (fJump > (vf3dOffset.y - 0.01f) && fJump < (vf3dOffset.y + 0.01f))
@@ -285,38 +313,14 @@ public:
         }
 
 
-        // Moving Down
-        if (GetKey(olc::Key::B).bHeld)
-        {
-            fJump -= fJumpRoC * fElapsedTime;
-            vf3dCamera.y = fJump;
-           
-        }
-
 
         // Set Sun Location
-        if(GetKey(olc::Key::S).bHeld)
+        if (GetKey(olc::Key::S).bHeld)
         {
             vf3dSunLocation.x = float(GetMouseX());
             vf3dSunLocation.y = float(GetMouseY());
         }
-
-        // Display Messages
-        DisplayMessages();
-
-        if (GetKey(olc::Key::ESCAPE).bPressed)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-
-       
-       
-		
-	}
+    }
 
     /*
     * Displays messages on the screen
