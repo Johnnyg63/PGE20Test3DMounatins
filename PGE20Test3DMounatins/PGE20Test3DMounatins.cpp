@@ -28,15 +28,16 @@ public:
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSanityCubeSize = { 4.0f, 4.0f, 4.0f }; // vf3d SanityCube Size
+    olc::vf3d vf3dSanityCubeSize = { 600.0f, 600.0f, 600.0f }; // vf3d SanityCube Size
     olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SanityCube Size 
+    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f };       // vf3d Offset
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
     float fYawRoC = 1.0f;	    // fYaw Rate of Change Look Up/Down 
     float fTheta = 0.0f;	    // Spins World transform
     float fThetaRoC = 1.5f;	    // fTheta Rate of Change Spin Left/Right
-    float fStrifeRoC = 2.5f;    // Strife Rate of Change, thanks: #Boguslavv
+    float fStrifeRoC = 8.5f;    // Strife Rate of Change, thanks: #Boguslavv
     float fForwardRoC = 8.0f;   // Forward/Backwards Rate of Change
 
 
@@ -141,15 +142,15 @@ public:
              
         // New code:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
-        olc::mf4d mWorldTrans, mCubeTrans;
+        olc::mf4d mCubeTrans, mCubeScale;
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
         // Sanity Cube
-        mWorldTrans.translate(vf3dOffset);
-        //mCubeTrans.scale(vf3dSanityCubeSize);
+        mCubeTrans.translate(vf3dSanityCubeOffset);
+        mCubeScale.scale(vf3dSanityCubeSize);
        // mCubeTrans.invert();
-        matCube = mWorldTrans * mCubeTrans;
+        matCube = mCubeTrans * mCubeScale;
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
