@@ -170,8 +170,8 @@ public:
         // Manage forward / backwards
         vf3dForward = vf3dLookDir * (fForwardRoC * fElapsedTime);
 
-        //HW3D_Projection(Cam3D.GetProjectionMatrix().m);
-        HW3D_Projection(matProject.m);
+        HW3D_Projection(Cam3D.GetProjectionMatrix().m);
+        //HW3D_Projection(matProject.m);
 
         // Lighting
         olc::vf3d vLight = vf3dSunLocation.norm();
@@ -192,14 +192,14 @@ public:
         }
 
         
-        HW3D_DrawLine((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
+        HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
-        HW3D_DrawLineBox((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
+        HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
         // renTestCube.Decal()
-        HW3D_DrawObject((matView * matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
+        HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
@@ -238,7 +238,7 @@ public:
             // Looking Right
             if ((float)GetMousePos().x > (((float)centreScreenPos.x / 100) * 130))
             {
-                fTheta += fThetaRoC * fElapsedTime;
+                fTheta -= fThetaRoC * fElapsedTime;
 
 
             }
@@ -246,7 +246,7 @@ public:
             // Looking Left
             if ((float)GetMousePos().x < (((float)centreScreenPos.x / 100) * 70))
             {
-                fTheta -= fThetaRoC * fElapsedTime;
+                fTheta += fThetaRoC * fElapsedTime;
 
 
             }
@@ -307,16 +307,16 @@ public:
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
 
         }
 
