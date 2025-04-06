@@ -27,8 +27,8 @@ public:
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSantiyCubeSize = { 2.0f, 4.0f, 2.0f }; // vf3d SantiyCube Size
-    olc::vf3d vf3dSantiyCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SantiyCube Size
+    olc::vf3d vf3dSantiyCubeSize = { 2.0f, 2.0f, 2.0f }; // vf3d SantiyCube Size
+    olc::vf3d vf3dSantiyCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SantiyCube Size 
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
@@ -111,7 +111,7 @@ public:
 
         // Create SantiyCube
           //StantiyCube
-        matSantiyCube = olc::utils::hw3d::CreateCube(vf3dSantiyCubeSize, vf3dSantiyCubeLocation);
+        matSantiyCube = olc::utils::hw3d::CreateSanityCube();
         renTestCube.Load("assets/images/TestCube.png");
 
         Clear(olc::BLUE);
@@ -139,6 +139,11 @@ public:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
         olc::mf4d mTrans, matCameraRot, matCamera;
         olc::mf4d mPosition, mCollision;
+        olc::mf4d mMovement, mOffset;
+
+        // SantiyCube
+        mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
+        matView = mMovement * mOffset;               // Get our new view point
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -178,15 +183,14 @@ public:
             meshMountain.col[i + 2] = pixIllum;
         }
 
-      
-
+        
         HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        //HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
-        HW3D_DrawObject((matWorld).m, renTestCube.Decal(), matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
+        HW3D_DrawObject((matView * matWorld).m, renTestCube.Decal(), matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
