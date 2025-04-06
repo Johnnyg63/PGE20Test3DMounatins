@@ -28,7 +28,7 @@ public:
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSanityCubeSize = { 2.0f, 2.0f, 2.0f }; // vf3d SanityCube Size
+    olc::vf3d vf3dSanityCubeSize = { 4.0f, 4.0f, 4.0f }; // vf3d SanityCube Size
     olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SanityCube Size 
 
 
@@ -116,7 +116,7 @@ public:
 
         // Create SanityCube
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
-        renTestCube.Load("assets/images/TestCube.png");
+        renTestCube.Load("assets/images/sanity_cube.png");
 
         Clear(olc::BLUE);
 
@@ -147,7 +147,9 @@ public:
 
         // Sanity Cube
         mWorldTrans.translate(vf3dOffset);
-        matCube = mWorldTrans;
+        //mCubeTrans.scale(vf3dSanityCubeSize);
+       // mCubeTrans.invert();
+        matCube = mWorldTrans * mCubeTrans;
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
