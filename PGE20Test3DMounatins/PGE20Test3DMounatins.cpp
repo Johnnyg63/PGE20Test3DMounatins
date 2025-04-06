@@ -27,6 +27,10 @@ public:
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
+    olc::vf3d vf3dSantiyCubeSize = { 2.0f, 4.0f, 2.0f }; // vf3d SantiyCube Size
+    olc::vf3d vf3dSantiyCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SantiyCube Size
+
+
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
     float fYawRoC = 1.0f;	    // fYaw Rate of Change Look Up/Down 
     float fTheta = 0.0f;	    // Spins World transform
@@ -42,12 +46,18 @@ public:
     /* Sprites */
     olc::Sprite* sprOLCPGEMobLogo = nullptr;
     olc::Sprite* sprLandScape = nullptr;
+    olc::Sprite* sprTestCube = nullptr;
     /* END Sprites*/
 
     /* Decals */
     olc::Decal* decOLCPGEMobLogo = nullptr;
     olc::Decal* decLandScape = nullptr;
+    olc::Decal* decTestCube = nullptr;
     /* End Decals */
+
+    /* Renderablea */
+    olc::Renderable renTestCube;
+    /* End Reneders */
 
     /* Vectors */
     std::vector<std::string> vecMessages;
@@ -68,6 +78,9 @@ public:
 
     // Skydomes et Al
 
+    // Sanity Cube
+    olc::utils::hw3d::mesh matSantiyCube;
+
 
 public:
 	bool OnUserCreate() override
@@ -84,6 +97,8 @@ public:
         matWorld.identity();
         matView.identity();
 
+        
+
         auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/mountains.obj");
         if (t.has_value())
         {
@@ -93,6 +108,11 @@ public:
         {
             int pause = 0; // TODO: Remove. We have an issue
         }
+
+        // Create SantiyCube
+          //StantiyCube
+        matSantiyCube = olc::utils::hw3d::CreateCube(vf3dSantiyCubeSize, vf3dSantiyCubeLocation);
+        renTestCube.Load("assets/images/TestCube.png");
 
         Clear(olc::BLUE);
 
@@ -158,12 +178,15 @@ public:
             meshMountain.col[i + 2] = pixIllum;
         }
 
+      
+
         HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
+        HW3D_DrawObject((matWorld).m, renTestCube.Decal(), matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
