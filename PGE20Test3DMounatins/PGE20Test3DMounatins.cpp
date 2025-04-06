@@ -114,8 +114,7 @@ public:
             int pause = 0; // TODO: Remove. We have an issue
         }
 
-        // Create SantiyCube
-          //StantiyCube
+        // Create SanityCube
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         renTestCube.Load("assets/images/TestCube.png");
 
@@ -170,6 +169,7 @@ public:
 
         //HW3D_Projection(Cam3D.GetProjectionMatrix().m);
         HW3D_Projection(matProject.m);
+
         // Lighting
         olc::vf3d vLight = vf3dSunLocation.norm();
         olc::Pixel pixIllum;
@@ -196,7 +196,7 @@ public:
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
         // renTestCube.Decal()
-        HW3D_DrawObject((matView * matWorld * matCube).m, nullptr, matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
+        HW3D_DrawObject((matView * matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
