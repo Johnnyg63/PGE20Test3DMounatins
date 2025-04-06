@@ -28,8 +28,8 @@ public:
     olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSantiyCubeSize = { 2.0f, 2.0f, 2.0f }; // vf3d SantiyCube Size
-    olc::vf3d vf3dSantiyCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SantiyCube Size 
+    olc::vf3d vf3dSanityCubeSize = { 2.0f, 2.0f, 2.0f }; // vf3d SanityCube Size
+    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SanityCube Size 
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
@@ -80,7 +80,7 @@ public:
     // Skydomes et Al
 
     // Sanity Cube
-    olc::utils::hw3d::mesh matSantiyCube;
+    olc::utils::hw3d::mesh matSanityCube;
 
 
 public:
@@ -146,13 +146,9 @@ public:
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
-        // Set up world offset position
+        // Sanity Cube
         mWorldTrans.translate(vf3dOffset);
         matCube = mWorldTrans;
-
-        // SantiyCube
-        mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
-        //matView = mMovement * mOffset;               // Get our new view point
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -200,7 +196,7 @@ public:
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
         // renTestCube.Decal()
-        HW3D_DrawObject((matView * matWorld * matCube).m, nullptr, matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
+        HW3D_DrawObject((matView * matWorld * matCube).m, nullptr, matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
