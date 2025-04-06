@@ -86,18 +86,22 @@ public:
 	bool OnUserCreate() override
 	{
         float fAspect = float(GetScreenSize().y) / float(GetScreenSize().x);
-        float fFieldOfView = 1.0f / (tan(3.14159f * 0.25f));
-        float fFar = 1000.0f;
-        float fNear = 0.1f;
+        float S = 1.0f / (tan(3.14159f * 0.25f));
+        float f = 1000.0f;
+        float n = 0.1f;
 
-        Cam3D.SetAspectRatio(fAspect);
-        Cam3D.SetClippingPlanes(fNear, fFar);
-        Cam3D.SetFieldOfView(fFieldOfView);
+        matProject(0, 0) = fAspect; matProject(0, 1) = 0.0f; matProject(0, 2) = 0.0f;	              matProject(0, 3) = 0.0f;
+        matProject(1, 0) = 0.0f;    matProject(1, 1) = 1;    matProject(1, 2) = 0.0f;                 matProject(1, 3) = 0.0f;
+        matProject(2, 0) = 0.0f;    matProject(2, 1) = 0.0f; matProject(2, 2) = -(f / (f - n));       matProject(2, 3) = -1.0f;
+        matProject(3, 0) = 0.0f;    matProject(3, 1) = 0.0f; matProject(3, 2) = -((f * n) / (f - n)); matProject(3, 3) = 0.0f;
 
         matWorld.identity();
         matView.identity();
 
-        
+        Cam3D.SetAspectRatio(fAspect);
+        Cam3D.SetClippingPlanes(n, f);
+        Cam3D.SetFieldOfView(S);
+
 
         auto t = olc::utils::hw3d::LoadObj("assets/objectfiles/mountains.obj");
         if (t.has_value())
@@ -137,13 +141,17 @@ public:
              
         // New code:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
-        olc::mf4d mTrans, matCameraRot, matCamera;
+        olc::mf4d mWorldTrans, mCubeTrans;
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
+        // Set up world offset position
+        mWorldTrans.translate(vf3dOffset);
+        matView = mWorldTrans;
+
         // SantiyCube
-        mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
-        matView = mMovement * mOffset;               // Get our new view point
+        //mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
+        //matView = mMovement * mOffset;               // Get our new view point
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -163,8 +171,8 @@ public:
         // Manage forward / backwards
         vf3dForward = vf3dLookDir * (fForwardRoC * fElapsedTime);
 
-        HW3D_Projection(Cam3D.GetProjectionMatrix().m);
-
+        //HW3D_Projection(Cam3D.GetProjectionMatrix().m);
+        HW3D_Projection(matProject.m);
         // Lighting
         olc::vf3d vLight = vf3dSunLocation.norm();
         olc::Pixel pixIllum;
@@ -184,11 +192,11 @@ public:
         }
 
         
-        HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
+        HW3D_DrawLine((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
-        HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
+        HW3D_DrawLineBox((matView * matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        //HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
         HW3D_DrawObject((matView * matWorld).m, renTestCube.Decal(), matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
 
@@ -229,7 +237,7 @@ public:
             // Looking Right
             if ((float)GetMousePos().x > (((float)centreScreenPos.x / 100) * 130))
             {
-                fTheta -= fThetaRoC * fElapsedTime;
+                fTheta += fThetaRoC * fElapsedTime;
 
 
             }
@@ -237,7 +245,7 @@ public:
             // Looking Left
             if ((float)GetMousePos().x < (((float)centreScreenPos.x / 100) * 70))
             {
-                fTheta += fThetaRoC * fElapsedTime;
+                fTheta -= fThetaRoC * fElapsedTime;
 
 
             }
@@ -262,7 +270,7 @@ public:
         }
         else
         {
-            // Move the camera back to centre, stops the dizzies!
+            // Move the camera back to center, stops the dizzies!
             if (fYaw > -0.01f && fYaw < 0.01f)
             {
                 fYaw = 0.0f;
@@ -298,16 +306,16 @@ public:
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
 
         }
 
