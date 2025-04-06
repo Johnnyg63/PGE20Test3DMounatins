@@ -17,6 +17,7 @@ public:
 
     olc::mf4d matWorld;
     olc::mf4d matView;
+    olc::mf4d matCube;
     olc::mf4d matProject;
     olc::utils::hw3d::mesh meshMountain;
    
@@ -147,10 +148,10 @@ public:
 
         // Set up world offset position
         mWorldTrans.translate(vf3dOffset);
-        matView = mWorldTrans;
+        matCube = mWorldTrans;
 
         // SantiyCube
-        //mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
+        mMovement.translate(vf3dSantiyCubeLocation); // first we move to the new location
         //matView = mMovement * mOffset;               // Get our new view point
 
         // Create a "Point At"
@@ -198,7 +199,8 @@ public:
 
         HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
-        HW3D_DrawObject((matView * matWorld).m, renTestCube.Decal(), matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
+        // renTestCube.Decal()
+        HW3D_DrawObject((matView * matWorld * matCube).m, nullptr, matSantiyCube.layout, matSantiyCube.pos, matSantiyCube.uv, matSantiyCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
@@ -334,7 +336,7 @@ public:
         }
         else
         {
-            if (fJump > (vf3dOffset.y - 0.01f) && fJump < (vf3dOffset.y + 0.01f))
+           /* if (fJump > (vf3dOffset.y - 0.01f) && fJump < (vf3dOffset.y + 0.01f))
             {
                 fJump = vf3dOffset.y;
                 vf3dCamera.y = fJump;
@@ -348,7 +350,7 @@ public:
             {
                 fJump += 4.0f * fElapsedTime;
                 vf3dCamera.y = fJump;
-            }
+            }*/
         }
 
 
