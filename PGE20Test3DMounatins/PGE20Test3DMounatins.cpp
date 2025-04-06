@@ -116,7 +116,7 @@ public:
 
         // Create SantiyCube
           //StantiyCube
-        matSantiyCube = olc::utils::hw3d::CreateSanityCube();
+        matSanityCube = olc::utils::hw3d::CreateSanityCube();
         renTestCube.Load("assets/images/TestCube.png");
 
         Clear(olc::BLUE);
