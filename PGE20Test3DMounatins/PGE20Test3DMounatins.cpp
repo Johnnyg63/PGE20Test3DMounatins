@@ -87,15 +87,15 @@ public:
 public:
 	bool OnUserCreate() override
 	{
-        float fAspect = float(GetScreenSize().y) / float(GetScreenSize().x);
+        float fAspect = float(GetScreenSize().x) / float(GetScreenSize().y); // Width / height 
         float S = 1.0f / (tan(3.14159f * 0.25f));
         float f = 1000.0f;
         float n = 0.1f;
 
-        matProject(0, 0) = fAspect; matProject(0, 1) = 0.0f; matProject(0, 2) = 0.0f;	              matProject(0, 3) = 0.0f;
+       /* matProject(0, 0) = fAspect; matProject(0, 1) = 0.0f; matProject(0, 2) = 0.0f;	              matProject(0, 3) = 0.0f;
         matProject(1, 0) = 0.0f;    matProject(1, 1) = 1;    matProject(1, 2) = 0.0f;                 matProject(1, 3) = 0.0f;
         matProject(2, 0) = 0.0f;    matProject(2, 1) = 0.0f; matProject(2, 2) = -(f / (f - n));       matProject(2, 3) = -1.0f;
-        matProject(3, 0) = 0.0f;    matProject(3, 1) = 0.0f; matProject(3, 2) = -((f * n) / (f - n)); matProject(3, 3) = 0.0f;
+        matProject(3, 0) = 0.0f;    matProject(3, 1) = 0.0f; matProject(3, 2) = -((f * n) / (f - n)); matProject(3, 3) = 0.0f;*/
 
         matWorld.identity();
         matView.identity();
@@ -149,7 +149,7 @@ public:
         // Sanity Cube
         mCubeTrans.translate(vf3dSanityCubeOffset);
         mCubeScale.scale(vf3dSanityCubeSize);
-       // mCubeTrans.invert();
+
         matCube = mCubeTrans * mCubeScale;
 
         // Create a "Point At"
