@@ -82,6 +82,7 @@ public:
 
     // Sanity Cube
     olc::utils::hw3d::mesh matSanityCube;
+    olc::utils::hw3d::mesh matTriange;
 
 
 public:
@@ -117,6 +118,8 @@ public:
 
         // Create SanityCube
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
+        matTriange = olc::utils::hw3d::CreateTriangle();
+
         renTestCube.Load("assets/images/sanity_cube.png");
 
         Clear(olc::BLUE);
@@ -196,10 +199,12 @@ public:
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        //HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+
+        HW3D_DrawObject((matWorld).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
         // renTestCube.Decal()
-        HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
+        //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });

@@ -810,6 +810,35 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
+	olc::utils::hw3d::mesh CreateTriangle()
+	{
+		// Vertices coordinates
+		//GLfloat vertices[] =
+		//{
+		//	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
+		//	0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
+		//	0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
+		//	-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
+		//	0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
+		//	0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+		//};
+
+		olc::utils::hw3d::mesh m;
+
+		// Lower left corner
+		m.pos.push_back({ -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+
+		// Lower right corner
+		m.pos.push_back({ 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+
+		// Upper Right corner
+		m.pos.push_back({ -0.5f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+		
+		return m;
+
+
+	}
+
 	std::optional<olc::utils::hw3d::mesh> LoadObj(const std::string& path)
 	{
 		olc::utils::hw3d::mesh m;
