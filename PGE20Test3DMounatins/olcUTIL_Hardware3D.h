@@ -70,6 +70,7 @@
 #include <optional>
 #include <sstream>
 
+
 #if !defined(OLC_VECTOR3D_DEFINED)
 namespace olc
 {
@@ -689,6 +690,9 @@ namespace olc::utils::hw3d
 	} TextureType;
 
 
+	// Some Const
+	const double PI = 3.141592653589793;
+
 	olc::utils::hw3d::mesh CreateSanityCube()
 	{
 		olc::utils::hw3d::mesh m;
@@ -891,7 +895,7 @@ namespace olc::utils::hw3d
 	}
 
 	/*
-	* Creates a 4 Sided Pyramind with bott
+	* Creates a Square Pyramind
 	*/
 	olc::utils::hw3d::mesh Create4SidedPyramid(TEXTURE_TYPE TextureType = SOLID_TEXTURE)
 	{
@@ -1028,6 +1032,33 @@ namespace olc::utils::hw3d
 		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
 		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
+
+		return m;
+	}
+
+	olc::utils::hw3d::mesh CreateSphere(float fRadius = 1.0f, int32_t nLatitudeCount = 30, int32_t nLongitudeCount = 30)
+	{
+		olc::utils::hw3d::mesh m;
+
+		for (int32_t i = 0; i <= nLatitudeCount; ++i)
+		{
+			float theta = i * PI / nLatitudeCount;
+			float sinTheta = sin(theta);
+			float cosTheta = cos(theta);
+
+			for (int32_t j = 0; j <= nLongitudeCount; ++j)
+			{
+				float phi = j * 2 * PI / nLongitudeCount;
+				float sinPhi = sin(phi);
+				float cosPhi = cos(phi);
+
+				float x = fRadius * cosPhi * sinTheta;
+				float y = fRadius * cosTheta;
+				float z = fRadius * sinPhi * sinTheta;
+
+				m.pos.push_back({ x, y, z }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);
+			}
+		}
 
 		return m;
 	}

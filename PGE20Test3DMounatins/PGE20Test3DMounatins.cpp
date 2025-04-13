@@ -20,6 +20,7 @@ public:
     olc::mf4d matCube;
     olc::mf4d mat3SPyrd;
     olc::mf4d mat4SPyrd;
+    olc::mf4d matMSphere;
     olc::mf4d matProject;
     olc::utils::hw3d::mesh meshMountain;
    
@@ -30,13 +31,18 @@ public:
     olc::vf3d vf3dOffset = { 5.0f, 5.0f, 20.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSanityCubeScale = { 600.0f, 600.0f, 600.0f };      // vf3d SanityCube Scale (in sort its Size)
+    olc::vf3d vf3dSanityCubeScale = { 600.0f, 600.0f, 600.0f };     // vf3d SanityCube Scale (in sort its Size)
     olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f };       // vf3d SanityCube Location 
-    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f }; // vf3d Offset
+    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f }; // vf3d SanityCube Offset
 
-    olc::vf3d vf3dPyramidScale = { 10.0f, 10.0f, 10.0f };        // vf3d SanityCube Scale (in sort its Size)
-    olc::vf3d vf3dPyramidLocation = { 2.5f, 2.5f, 2.5f };   // vf3d SanityCube Location 
-    olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };     // vf3d Offset
+    olc::vf3d vf3dPyramidScale = { 30.0f, 50.0f, 30.0f };   // vf3d Pyramid Scale (in sort its Size)
+    olc::vf3d vf3dPyramidLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Pyramid Location 
+    olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Pyramid Offset
+
+
+    olc::vf3d vf3dSphereScale = { 1.0f, 1.0f, 1.0f };   // vf3d Sphere Scale (in sort its Size)
+    olc::vf3d vf3dSphereLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Sphere Location 
+    olc::vf3d vf3dSphereOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Sphere Offset
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
@@ -92,6 +98,7 @@ public:
     olc::utils::hw3d::mesh matTriange;
     olc::utils::hw3d::mesh matPyramid;
     olc::utils::hw3d::mesh mat4SPyramid;
+    olc::utils::hw3d::mesh matSphere;
 
 
 public:
@@ -129,12 +136,13 @@ public:
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
-        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TEXTURE_MAP);
+        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
+        matSphere = olc::utils::hw3d::CreateSphere(1.0f, 15, 15);;
 
         renTestCube.Load("assets/images/sanity_cube.png");
-        //renBrick.Load("assets/images/Brick.png");
+        renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
-        renBrick.Load("assets/images/Sqaure_Pyramid_Texture_Map_Test.png");
+        //renBrick.Load("assets/images/GizaHighRes.jpg");
 
         Clear(olc::BLUE);
 
@@ -161,6 +169,7 @@ public:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
         olc::mf4d mCubeTrans, mCubeScale;
         olc::mf4d mPyramidTrans, mPyramidScale, mPyramidRotationX, mPyramidRotationY, mPyramidRotationZ;
+        olc::mf4d mSphereTrans, mSphereScale, mSphereRotationX, mSphereRotationY, mSphereRotationZ;
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
@@ -181,6 +190,12 @@ public:
         mat3SPyrd = mPyramidTrans * mPyramidScale * mPyramidRotationX;
 
         mat4SPyrd = mPyramidTrans * mPyramidScale;
+
+        // Sphere
+        mSphereTrans.translate(vf3dSphereLocation);
+        mSphereScale.scale(vf3dSphereScale);
+
+        matMSphere = mSphereTrans * mSphereScale;
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -232,7 +247,9 @@ public:
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+        // HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+
+        HW3D_DrawObject((matWorld * matMSphere).m, nullptr, matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
