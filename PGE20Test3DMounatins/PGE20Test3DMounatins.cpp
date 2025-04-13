@@ -132,6 +132,8 @@ public:
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TEXTURE_MAP);
 
         renTestCube.Load("assets/images/sanity_cube.png");
+        //renBrick.Load("assets/images/Brick.png");
+        //renBrick.Load("assets/images/GizaTest1.png");
         renBrick.Load("assets/images/Sqaure_Pyramid_Texture_Map_Test.png");
 
         Clear(olc::BLUE);
