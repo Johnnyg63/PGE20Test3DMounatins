@@ -22,15 +22,19 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 0.0f, 10.0f, 0.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { 0.0f, 10.0f, 10.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 0.0f };       // vf3d Offset
+    olc::vf3d vf3dOffset = { 0.0f, 10.0f, 10.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSanityCubeSize = { 600.0f, 600.0f, 600.0f }; // vf3d SanityCube Size
-    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f }; // vf3d SanityCube Size 
-    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f };       // vf3d Offset
+    olc::vf3d vf3dSanityCubeScale = { 600.0f, 600.0f, 600.0f };      // vf3d SanityCube Scale (in sort its Size)
+    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f };       // vf3d SanityCube Location 
+    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f }; // vf3d Offset
+
+    olc::vf3d vf3dPyramidScale = { 1.0f, 1.0f, 1.0f };        // vf3d SanityCube Scale (in sort its Size)
+    olc::vf3d vf3dPyramidLocation = { 0.0f, 10.0f, 0.0f };   // vf3d SanityCube Location 
+    olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };     // vf3d Offset
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
@@ -83,6 +87,7 @@ public:
     // Sanity Cube
     olc::utils::hw3d::mesh matSanityCube;
     olc::utils::hw3d::mesh matTriange;
+    olc::utils::hw3d::mesh matPyramid;
 
 
 public:
@@ -119,6 +124,7 @@ public:
         // Create SanityCube
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
+        matPyramid = olc::utils::hw3d::CreatePyramid();
 
         renTestCube.Load("assets/images/sanity_cube.png");
 
@@ -146,14 +152,22 @@ public:
         // New code:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
         olc::mf4d mCubeTrans, mCubeScale;
+        olc::mf4d mPyramidTrans, mPyramidScale;
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
         // Sanity Cube
         mCubeTrans.translate(vf3dSanityCubeOffset);
-        mCubeScale.scale(vf3dSanityCubeSize);
+        mCubeScale.scale(vf3dSanityCubeScale);
 
         matCube = mCubeTrans * mCubeScale;
+
+        // Pyramid
+        mPyramidTrans.translate(vf3dPyramidOffset);
+        mPyramidScale.scale(vf3dPyramidScale);
+
+        matCube = mPyramidTrans * mPyramidScale;
+
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -201,7 +215,9 @@ public:
 
         //HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
-        HW3D_DrawObject((matWorld).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
+        // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
+
+        HW3D_DrawObject((matWorld * matCube).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
