@@ -882,6 +882,38 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
+	olc::utils::hw3d::mesh Create4SidedPyramid()
+	{
+		olc::utils::hw3d::mesh m;
+
+		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0}); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);
+
+		// Face 1 
+		//m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 0 ( Top Point)
+		//m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 1
+		//m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 2
+
+		//// Face 2
+		//m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 0 ( Top Point)
+		//m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 2
+		//m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 3
+
+		//// Face 3
+		//m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 0 ( Top Point)
+		//m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f, }); m.col.push_back(olc::RED); // Position 1
+		//m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 3
+
+
+
+		return m;
+	}
+
 	std::optional<olc::utils::hw3d::mesh> LoadObj(const std::string& path)
 	{
 		olc::utils::hw3d::mesh m;

@@ -18,7 +18,8 @@ public:
     olc::mf4d matWorld;
     olc::mf4d matView;
     olc::mf4d matCube;
-    olc::mf4d matPyrd;
+    olc::mf4d mat3SPyrd;
+    olc::mf4d mat4SPyrd;
     olc::mf4d matProject;
     olc::utils::hw3d::mesh meshMountain;
    
@@ -89,6 +90,7 @@ public:
     olc::utils::hw3d::mesh matSanityCube;
     olc::utils::hw3d::mesh matTriange;
     olc::utils::hw3d::mesh matPyramid;
+    olc::utils::hw3d::mesh mat4SPyramid;
 
 
 public:
@@ -126,6 +128,7 @@ public:
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
+        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid();
 
         renTestCube.Load("assets/images/sanity_cube.png");
 
@@ -171,8 +174,9 @@ public:
         mPyramidRotationY.rotateY(0.78539816); // 45' = 0.78539816R
         mPyramidRotationZ.rotateZ(0.78539816); // 45' = 0.78539816R
 
-        matPyrd = mPyramidTrans * mPyramidScale * mPyramidRotationX;
+        mat3SPyrd = mPyramidTrans * mPyramidScale * mPyramidRotationX;
 
+        mat4SPyrd = mPyramidTrans * mPyramidScale;
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -222,7 +226,9 @@ public:
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
-        HW3D_DrawObject((matWorld * matPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
+        // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
+
+        HW3D_DrawObject((matWorld * mat4SPyrd).m, nullptr, mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
 
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
