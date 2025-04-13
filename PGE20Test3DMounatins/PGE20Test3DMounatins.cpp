@@ -251,6 +251,7 @@ public:
 
         HW3D_DrawObject((matWorld * matMSphere).m, nullptr, matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 
+        
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
