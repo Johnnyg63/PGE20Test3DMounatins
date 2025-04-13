@@ -63,8 +63,9 @@ public:
     olc::Decal* decTestCube = nullptr;
     /* End Decals */
 
-    /* Renderablea */
+    /* Renderables */
     olc::Renderable renTestCube;
+    olc::Renderable renBrick;
     /* End Reneders */
 
     /* Vectors */
@@ -131,6 +132,7 @@ public:
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid();
 
         renTestCube.Load("assets/images/sanity_cube.png");
+        renBrick.Load("assets/images/GizaTest1.png");
 
         Clear(olc::BLUE);
 
@@ -228,7 +230,7 @@ public:
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject((matWorld * mat4SPyrd).m, nullptr, mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+        HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
 
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);

@@ -886,34 +886,35 @@ namespace olc::utils::hw3d
 	{
 		olc::utils::hw3d::mesh m;
 
-		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);	// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);	// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0}); m.col.push_back(olc::WHITE);		// Position 3
 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);	// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);	// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);	// Position 4
+		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
+
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
 
 		// Face 1 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 2
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);		// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 		// Face 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::RED);	// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::RED);	// Position 3
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 		// Face 3
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::DARK_MAGENTA);	// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::DARK_MAGENTA);	// Position 4
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f }); m.col.push_back(olc::WHITE);		// Position 5 (Top Point)
 
 		// Face 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);	// Position 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREEN);	// Position 1
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::GREY);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);	// Position 1
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f}); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 
 		return m;
