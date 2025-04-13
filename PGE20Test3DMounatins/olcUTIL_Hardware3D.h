@@ -815,20 +815,20 @@ namespace olc::utils::hw3d
 		olc::utils::hw3d::mesh m;
 
 		// Lower left corner
-		m.pos.push_back({ -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
 
 		// Lower right corner
-		m.pos.push_back({ 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.0f, 0.5f * float(sqrt(3)) / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
 
 		// Upper Right corner
-		m.pos.push_back({ 0.5f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0.5f, 0.0f * float(sqrt(3)) * 2 / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
 		
 		return m;
 
 
 	}
 
-	olc::utils::hw3d::mesh CreatePyramid() 
+	olc::utils::hw3d::mesh Create3SidedPyramid() 
 	{
 		olc::utils::hw3d::mesh m;
 
@@ -842,11 +842,29 @@ namespace olc::utils::hw3d
 		//};
 
 		/*				   COORDINATES			|					NORMS        |					TexCoord     |							 COLORS    */
-		m.pos.push_back({ -0.5f, 0.0f,  0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Left
-		m.pos.push_back({ -0.5f, 0.0f, -0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 5.0f, 0.0f, }); m.col.push_back(olc::PixelF(0.83f, 0.70f, 0.44f)); // Right
-		m.pos.push_back({ 0.5f, 0.0f, -0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::PixelF(0.83f, 0.70f, 0.44f)); // Bottom
-		m.pos.push_back({ 0.5f, 0.0f,  0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 5.0f, 0.0f }); m.col.push_back(olc::PixelF(0.83f, 0.70f, 0.44f)); // Front
-		m.pos.push_back({ 0.0f, 0.8f,  0.0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 2.5f, 5.0f }); m.col.push_back(olc::PixelF(0.92f, 0.86f, 0.76f)); // Back
+		// Face 1 
+		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 0 ( Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 1
+		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 2
+
+		// Face 2
+		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 0 ( Top Point)
+		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 2
+		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 3
+
+		// Face 3
+		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 0 ( Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f, }); m.col.push_back(olc::RED); // Position 1
+		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 3
+
+		// Face 4
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f, }); m.col.push_back(olc::GREEN); // Position 1
+		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREEN); // Position 2
+		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREEN); // Position 3
+
+
+		//m.pos.push_back({ 0.5f, 0.0f,  0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 5.0f, 0.0f }); m.col.push_back(olc::GREEN); // Front
+		//m.pos.push_back({ 0.0f, 0.8f,  0.0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 2.5f, 5.0f }); m.col.push_back(olc::CYAN); // Back
 
 		// Indices for vertices order ????
 		/*GLuint indices[] =

@@ -124,7 +124,7 @@ public:
         // Create SanityCube
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
-        matPyramid = olc::utils::hw3d::CreatePyramid();
+        matPyramid = olc::utils::hw3d::Create3SidedPyramid();
 
         renTestCube.Load("assets/images/sanity_cube.png");
 
@@ -160,7 +160,7 @@ public:
         mCubeTrans.translate(vf3dSanityCubeOffset);
         mCubeScale.scale(vf3dSanityCubeScale);
 
-        matCube = mCubeTrans * mCubeScale;
+        //matCube = mCubeTrans * mCubeScale;
 
         // Pyramid
         mPyramidTrans.translate(vf3dPyramidOffset);
