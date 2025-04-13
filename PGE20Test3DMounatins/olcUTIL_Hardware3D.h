@@ -967,6 +967,34 @@ namespace olc::utils::hw3d
 			case TEXTURE_MAP:
 			default:
 			{
+				// Buttom Face, 2 Triangles
+				m.uv.push_back({ 0.34f, 0.333333f });	// Position 1
+				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+
+				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+
+				// Face 1
+				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+				m.uv.push_back({ 0.5f, 0.0f });		// Position
+
+				// Face 2
+				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+				m.uv.push_back({ 1.0f, 0.5f });		// Position		
+
+				// Face 3
+				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+				m.uv.push_back({ 0.5f, 1.0f });		// Position 
+
+				// Face 4
+				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+				m.uv.push_back({ 0.0f, 0.5f }); // Position 5 (Top Point)
 				break;
 			}
 		}

@@ -129,10 +129,10 @@ public:
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
-        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::SOLID_TEXTURE);
+        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TEXTURE_MAP);
 
         renTestCube.Load("assets/images/sanity_cube.png");
-        renBrick.Load("assets/images/brick.png");
+        renBrick.Load("assets/images/Sqaure_Pyramid_Texture_Map_Test.png");
 
         Clear(olc::BLUE);
 
