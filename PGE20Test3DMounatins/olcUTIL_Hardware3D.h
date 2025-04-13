@@ -680,6 +680,14 @@ namespace olc::utils::hw3d
 		olc::DecalStructure layout = olc::DecalStructure::LIST;
 	};
 
+	enum TEXTURE_TYPE {
+
+		SOLID_TEXTURE = 0,
+		TOP_DOWN_VIEW,
+		TEXTURE_MAP
+
+	} TextureType;
+
 
 	olc::utils::hw3d::mesh CreateSanityCube()
 	{
@@ -882,39 +890,115 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
-	olc::utils::hw3d::mesh Create4SidedPyramid()
+	/*
+	* Creates a 4 Sided Pyramind with bott
+	*/
+	olc::utils::hw3d::mesh Create4SidedPyramid(TEXTURE_TYPE TextureType = SOLID_TEXTURE)
 	{
 		olc::utils::hw3d::mesh m;
 
+		switch (TextureType)
+		{
+			case SOLID_TEXTURE:
+			{
+				// Buttom Face, 2 Triangles
+				m.uv.push_back({ 0.0f, 0.0f });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f }); // Position 2
+				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+
+				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
+				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+				m.uv.push_back({ 0.0f, 1.0f }); // Position 4
+
+				// Face 1
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+
+				// Face 2
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+
+				// Face 3
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+
+				// Face 4
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+				break;
+			}
+			case TOP_DOWN_VIEW:
+			{
+				// Buttom Face, 2 Triangles
+				m.uv.push_back({ 0.0f, 0.0f });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f }); // Position 2
+				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+
+				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
+				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+				m.uv.push_back({ 0.0f, 1.0f }); // Position 4
+
+				// Face 1
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+
+				// Face 2
+				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+				m.uv.push_back({ 1.0f, 1.0f });	// Position 3
+				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+
+				// Face 3
+				m.uv.push_back({ 1.0f, 1.0f });	// Position 3
+				m.uv.push_back({ 0.0f, 1.0f });	// Position 4
+				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+
+				// Face 4
+				m.uv.push_back({ 0.0f, 1.0f });	// Position 4
+				m.uv.push_back({ 0.0, 0.0 });	// Position 1
+				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+
+				break;
+			}
+			case TEXTURE_MAP:
+			default:
+			{
+				break;
+			}
+		}
 
 		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 2
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
 
 		// Face 1 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);		// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 2
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 		// Face 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 0.0f }); m.col.push_back(olc::WHITE);	// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 2
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 3
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 		// Face 3
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 1.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f }); m.col.push_back(olc::WHITE);		// Position 5 (Top Point)
+		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 		// Face 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0f, 1.0f }); m.col.push_back(olc::WHITE);	// Position 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);	// Position 1
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5f, 0.5f}); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
+		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
+		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
 
 
 		return m;
