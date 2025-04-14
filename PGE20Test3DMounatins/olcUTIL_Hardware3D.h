@@ -1036,27 +1036,52 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
-	olc::utils::hw3d::mesh CreateSphere(float fRadius = 1.0f, int32_t nLatitudeCount = 30, int32_t nLongitudeCount = 30)
+	/*
+	* Creates a Sphere
+	*/
+	olc::utils::hw3d::mesh CreateSphere(float fRadius = (PI / 10), int32_t nLatitudeCount = (PI * 1000), int32_t nLongitudeCount = (PI * 10))
 	{
 		olc::utils::hw3d::mesh m;
 
+		std::vector<olc::Pixel> vecColours;
+		//vecColours.push_back(olc::GREY);
+		//vecColours.push_back(olc::RED);
+		vecColours.push_back(olc::YELLOW);
+		vecColours.push_back(olc::GREEN);
+		//vecColours.push_back(olc::CYAN);
+		//vecColours.push_back(olc::GREEN);
+		//vecColours.push_back(olc::WHITE);
+
+		size_t nCount = 0;
+		size_t max = vecColours.size();
+		float fTheta = 0.0f;
+		float sinTheta = 0.0f;
+		float cosTheta = 0.0f;
+		float fHorAnge = 0.0f;
+		float sinHorAnge = 0.0f;
+		float cosHorAnge = 0.0f;
+		float x, y, z;
+
 		for (int32_t i = 0; i <= nLatitudeCount; ++i)
 		{
-			float theta = i * PI / nLatitudeCount;
-			float sinTheta = sin(theta);
-			float cosTheta = cos(theta);
-
+			fTheta = i * PI / nLatitudeCount;	// Verical Angle
+			sinTheta = sin(fTheta);
+			cosTheta = cos(fTheta);
+			
 			for (int32_t j = 0; j <= nLongitudeCount; ++j)
 			{
-				float phi = j * 2 * PI / nLongitudeCount;
-				float sinPhi = sin(phi);
-				float cosPhi = cos(phi);
+				nCount++;
+				if (nCount >= max) nCount = 0; // Create magical colours
 
-				float x = fRadius * cosPhi * sinTheta;
-				float y = fRadius * cosTheta;
-				float z = fRadius * sinPhi * sinTheta;
+				fHorAnge = j * 2 * PI / nLongitudeCount; // Horizontal angle
+				sinHorAnge = sin(fHorAnge);
+				cosHorAnge = cos(fHorAnge);
 
-				m.pos.push_back({ x, y, z }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(olc::WHITE);
+				x = fRadius * cosHorAnge * sinTheta;
+				y = fRadius * cosTheta;
+				z = fRadius * sinHorAnge * sinTheta;
+
+				m.pos.push_back({ x, y, z }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(vecColours[nCount]);
 			}
 		}
 

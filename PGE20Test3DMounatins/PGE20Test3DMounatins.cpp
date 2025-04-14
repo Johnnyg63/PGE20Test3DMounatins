@@ -40,8 +40,8 @@ public:
     olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Pyramid Offset
 
 
-    olc::vf3d vf3dSphereScale = { 1.0f, 1.0f, 1.0f };   // vf3d Sphere Scale (in sort its Size)
-    olc::vf3d vf3dSphereLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Sphere Location 
+    olc::vf3d vf3dSphereScale = { 10.0f, 10.0f, 10.0f };   // vf3d Sphere Scale (in sort its Size)
+    olc::vf3d vf3dSphereLocation = { 5.0f, 5.0f, 5.0f };   // vf3d Sphere Location 
     olc::vf3d vf3dSphereOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Sphere Offset
 
 
@@ -137,7 +137,7 @@ public:
         matTriange = olc::utils::hw3d::CreateTriangle();
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
-        matSphere = olc::utils::hw3d::CreateSphere(1.0f, 15, 15);;
+        matSphere = olc::utils::hw3d::CreateSphere();
 
         renTestCube.Load("assets/images/sanity_cube.png");
         renBrick.Load("assets/images/Brick.png");
