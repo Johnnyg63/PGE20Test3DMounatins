@@ -1043,6 +1043,10 @@ namespace olc::utils::hw3d
 	{
 		olc::utils::hw3d::mesh m;
 
+		float phi = (1.0f + sqrt(5.0f)) * 0.5f; // golden ratio
+		float a = 1.0f;
+		float b = 1.0f / phi;
+
 		std::vector<olc::Pixel> vecColours;
 		//vecColours.push_back(olc::GREY);
 		//vecColours.push_back(olc::RED);
@@ -1062,13 +1066,18 @@ namespace olc::utils::hw3d
 		float cosHorAnge = 0.0f;
 		float x, y, z;
 
-		for (int32_t i = 0; i <= nLatitudeCount; ++i)
+		olc::vf3d vf3dPosition = { 0.0f, 0.0f, 0.0f };
+		olc::vf3d vf3dNormal = { 0.0f, 0.0f, 0.0f };
+		
+		vf3dNormal = vf3dPosition.norm();
+
+		for (int32_t i = 0; i <= nLatitudeCount; i++)
 		{
 			fTheta = i * PI / nLatitudeCount;	// Verical Angle
 			sinTheta = sin(fTheta);
 			cosTheta = cos(fTheta);
 			
-			for (int32_t j = 0; j <= nLongitudeCount; ++j)
+			for (int32_t j = 0; j <= nLongitudeCount; j++)
 			{
 				nCount++;
 				if (nCount >= max) nCount = 0; // Create magical colours
@@ -1077,11 +1086,18 @@ namespace olc::utils::hw3d
 				sinHorAnge = sin(fHorAnge);
 				cosHorAnge = cos(fHorAnge);
 
-				x = fRadius * cosHorAnge * sinTheta;
-				y = fRadius * cosTheta;
-				z = fRadius * sinHorAnge * sinTheta;
+				vf3dPosition.x = fRadius * cosHorAnge * sinTheta;
+				vf3dPosition.y = fRadius * cosTheta;
+				vf3dPosition.z = fRadius * sinHorAnge * sinTheta;
 
-				m.pos.push_back({ x, y, z }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.0 }); m.col.push_back(vecColours[nCount]);
+				vf3dNormal = vf3dPosition.norm();
+				// {x1, y1, z1 }, {x2, y2, z2 }, {x3, y3, z3 }
+
+				m.pos.push_back({ vf3dPosition.x, vf3dPosition.y, vf3dPosition.z });	// Position
+				m.norm.push_back({ vf3dNormal.x, vf3dNormal.y, vf3dNormal.z, 0 });		// Normals
+				m.uv.push_back({ 0.0, 0.0 });											// Texture Coords
+				m.col.push_back(vecColours[nCount]);									// Colours
+				
 			}
 		}
 
