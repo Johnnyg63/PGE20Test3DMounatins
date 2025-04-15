@@ -145,7 +145,7 @@ public:
         //renBrick.Load("assets/images/GizaTest1.png");
         //renBrick.Load("assets/images/GizaHighRes.jpg");
 
-        renEarth.Load("assets/images/EarthCircle.jpeg");
+        renEarth.Load("assets/images/WorldTexture3D.jpeg");
 
         Clear(olc::BLUE);
 
@@ -197,8 +197,12 @@ public:
         // Sphere
         mSphereTrans.translate(vf3dSphereLocation);
         mSphereScale.scale(vf3dSphereScale);
+        mSphereRotationY.rotateY(-1.57079633);
+        mSphereRotationZ.rotateZ(3.14159265);
 
-        matMSphere = mSphereTrans * mSphereScale;
+        matMSphere = mSphereTrans * mSphereScale *mSphereRotationZ; // Rotate the Sphere into the correct North/South pole position
+        matMSphere = matMSphere * mSphereRotationY; // Rotate the Sphere so that Ireland and England are facing us
+
 
         // Create a "Point At"
         olc::vf3d vf3dTarget = { 0,0,1 };
@@ -252,7 +256,7 @@ public:
 
         // HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
 
-        HW3D_DrawObject((matWorld * matMSphere).m, nullptr, matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
+        HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 
         
         // renTestCube.Decal()

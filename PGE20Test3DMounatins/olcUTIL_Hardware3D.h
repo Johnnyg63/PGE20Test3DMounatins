@@ -847,13 +847,12 @@ namespace olc::utils::hw3d
 		auto meshPushBack = [&](vf3d pos, vf2d textCoord, olc::Pixel col = olc::WHITE)
 			{
 				vf3d vf3dNorm = pos.norm();
-				m.pos.push_back({ pos.x, pos.y, pos.z }); 
-				m.uv.push_back({ textCoord.x, textCoord.y });
-				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 }); 
-				m.col.push_back(col);
+				m.pos.push_back({ pos.x, pos.y, pos.z });						// COORDINATES
+				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 });	// NORMS
+				m.uv.push_back({ textCoord.x, textCoord.y });					// TexCoord
+				m.col.push_back(col);											// COLOURS
 			};
 
-		/*				   COORDINATES			|					NORMS        |					TexCoord     |							 COLORS    */
 		// Face 1 
 		meshPushBack({ 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::GREY);	// Position 0 (Top Point)
 		meshPushBack({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, olc::GREY);	// Position 1
@@ -1030,37 +1029,20 @@ namespace olc::utils::hw3d
 	/*
 	* Creates a Sphere
 	*/
-	olc::utils::hw3d::mesh CreateSphere(float fRadius = (PI / 10), int32_t nLatitudeCount = (PI * 1000), int32_t nLongitudeCount = (PI * 10))
+	olc::utils::hw3d::mesh CreateSphere(float fRadius = 0.5, int32_t nLatitudeCount = 100, int32_t nLongitudeCount = 100)
 	{
 		olc::utils::hw3d::mesh m;
 
-		float phi = (1.0f + sqrt(5.0f)) * 0.5f; // golden ratio
-		float a = 1.0f;
-		float b = 1.0f / phi;
+		olc::utils::hw3d::mesh mTemp; // Temp mesh use to calcuate the points, texture and colours
 
-		std::vector<olc::Pixel> vecColours;
-		//vecColours.push_back(olc::GREY);
-		//vecColours.push_back(olc::RED);
-		vecColours.push_back(olc::YELLOW);
-		vecColours.push_back(olc::GREEN);
-		//vecColours.push_back(olc::CYAN);
-		//vecColours.push_back(olc::GREEN);
-		//vecColours.push_back(olc::WHITE);
-
-		size_t nCount = 0;
-		size_t max = vecColours.size();
 		float fTheta = 0.0f;
 		float sinTheta = 0.0f;
 		float cosTheta = 0.0f;
-		float fHorAnge = 0.0f;
-		float sinHorAnge = 0.0f;
-		float cosHorAnge = 0.0f;
+		float fHorAngle = 0.0f;
+		float sinHorAngle = 0.0f;
+		float cosHorAngle = 0.0f;
 		float x, y, z, v, u;
-
-		olc::vf3d vf3dPosition = { 0.0f, 0.0f, 0.0f };
-		olc::vf3d vf3dNormal = { 0.0f, 0.0f, 0.0f };
-		
-		vf3dNormal = vf3dPosition.norm();
+		olc::vf3d vf3dPosition;
 
 		for (int32_t i = 0; i <= nLatitudeCount; i++)
 		{
@@ -1071,30 +1053,120 @@ namespace olc::utils::hw3d
 			
 			for (int32_t j = 0; j <= nLongitudeCount; j++)
 			{
-				nCount++;
-				if (nCount >= max) nCount = 0; // Create magical colours
-
 				u = 1 - float(j) / float(nLatitudeCount); // Get the u TextCoord for UV
 
-				fHorAnge = j * 2 * PI / nLongitudeCount; // Horizontal angle
-				sinHorAnge = sin(fHorAnge);
-				cosHorAnge = cos(fHorAnge);
+				fHorAngle = j * 2 * PI / nLongitudeCount; // Horizontal angle
+				sinHorAngle = sin(fHorAngle);
+				cosHorAngle = cos(fHorAngle);
 
-				vf3dPosition.x = fRadius * cosHorAnge * sinTheta;
+				vf3dPosition.x = fRadius * cosHorAngle * sinTheta;
 				vf3dPosition.y = fRadius * cosTheta;
-				vf3dPosition.z = fRadius * sinHorAnge * sinTheta;
+				vf3dPosition.z = fRadius * sinHorAngle * sinTheta;
 
-				vf3dNormal = vf3dPosition.norm();
-				// {x1, y1, z1 }, {x2, y2, z2 }, {x3, y3, z3 }
-
-				m.pos.push_back({ vf3dPosition.x, vf3dPosition.y, vf3dPosition.z });	// Position
-				m.norm.push_back({ vf3dNormal.x, vf3dNormal.y, vf3dNormal.z, 0 });		// Normals
-				m.uv.push_back({ u, v });												// Texture Coords
-				m.col.push_back(olc::WHITE);									// Colours
+				mTemp.pos.push_back({ vf3dPosition.x, vf3dPosition.y, vf3dPosition.z });	// Position
+				mTemp.uv.push_back({ u, v });												// Texture Coords
+				mTemp.col.push_back(olc::WHITE);											// Colours
 				
 			}
 		}
 
+		// As the engine currently does not support indices we need to calculate the trianges (faces)
+		// To do this we will work out the indices, then push back the indice mTemp vector into our output mesh vectors
+		// Hence in the end we will have all the face locations in blocks of 3 in mTemp output
+
+		// This code is modified version from the Microsoft DirectX tutorial 
+		// https://github.com/microsoft/DirectXTK/wiki
+
+		auto meshPushBack = [&](vf3d pos, vf2d textCoord, olc::Pixel col = olc::WHITE)
+			{
+				vf3d vf3dNorm = pos.norm();
+				m.pos.push_back({ pos.x, pos.y, pos.z });						// COORDINATES
+				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 });	// NORMS
+				m.uv.push_back({ textCoord.x, textCoord.y });					// TexCoord
+				m.col.push_back(col);											// COLOURS
+			};
+
+
+
+		const size_t stride = nLongitudeCount + 1;
+		const size_t mTempSize = mTemp.pos.size() - 1;
+
+		size_t pos0, pos1, pos2, pos3, nextY, nextX;
+
+
+		for (size_t y = 0; y < nLatitudeCount; y++)
+		{
+			for (size_t x = 0; x <= nLongitudeCount; x++)
+			{
+				nextY = y + 1;
+				nextX = (x + 1) % stride;
+
+				pos0 = y * stride + x;			// point = y * width + x
+				pos1 = nextY * stride + x;
+				pos2 = y * stride + nextX;
+				pos3 = nextY * stride + nextX;
+
+				// Face 1
+				
+				// Position 0
+				meshPushBack
+				(
+					{ mTemp.pos[pos0][0], mTemp.pos[pos0][1], mTemp.pos[pos0][2] },
+					{ mTemp.uv[pos0][0], mTemp.uv[pos0][1]},
+					mTemp.col[pos0]				
+				);
+
+				// Position 1
+				meshPushBack
+				(
+					{ mTemp.pos[pos1][0], mTemp.pos[pos1][1], mTemp.pos[pos1][2] },
+					{ mTemp.uv[pos1][0], mTemp.uv[pos1][1] },
+					mTemp.col[pos1]
+				);
+
+				// Position 2
+				meshPushBack
+				(
+					{ mTemp.pos[pos2][0], mTemp.pos[pos2][1], mTemp.pos[pos2][2] },
+					{ mTemp.uv[pos2][0], mTemp.uv[pos2][1] },
+					mTemp.col[pos2]
+				);
+
+				// Face 2
+
+				// Position 1
+				meshPushBack
+				(
+					{ mTemp.pos[pos1][0], mTemp.pos[pos1][1], mTemp.pos[pos1][2] },
+					{ mTemp.uv[pos1][0], mTemp.uv[pos1][1] },
+					mTemp.col[pos1]
+				);
+
+				// Position 2
+				meshPushBack
+				(
+					{ mTemp.pos[pos2][0], mTemp.pos[pos2][1], mTemp.pos[pos2][2] },
+					{ mTemp.uv[pos2][0], mTemp.uv[pos2][1] },
+					mTemp.col[pos2]
+				);
+
+				// position 3
+				meshPushBack
+				(
+					{ mTemp.pos[pos3][0], mTemp.pos[pos3][1], mTemp.pos[pos3][2] },
+					{ mTemp.uv[pos3][0], mTemp.uv[pos3][1] },
+					mTemp.col[pos3]
+				);
+
+
+			}
+		}
+
+		// finally clean up
+		mTemp.col.clear();
+		mTemp.norm.clear();
+		mTemp.pos.clear();
+		mTemp.uv.clear();
 		return m;
 	}
 
