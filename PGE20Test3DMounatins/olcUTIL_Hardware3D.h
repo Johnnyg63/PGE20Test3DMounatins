@@ -1029,7 +1029,7 @@ namespace olc::utils::hw3d
 	/*
 	* Creates a Sphere
 	*/
-	olc::utils::hw3d::mesh CreateSphere(float fRadius = 0.5, int32_t nLatitudeCount = 100, int32_t nLongitudeCount = 100)
+	olc::utils::hw3d::mesh CreateSphere(float fRadius = 0.5, int32_t nLatitudeCount = 50, int32_t nLongitudeCount = 50)
 	{
 		olc::utils::hw3d::mesh m;
 
@@ -1092,7 +1092,6 @@ namespace olc::utils::hw3d
 		const size_t mTempSize = mTemp.pos.size() - 1;
 
 		size_t pos0, pos1, pos2, pos3, nextY, nextX;
-
 
 		for (size_t y = 0; y < nLatitudeCount; y++)
 		{
@@ -1158,7 +1157,7 @@ namespace olc::utils::hw3d
 					mTemp.col[pos3]
 				);
 
-
+				
 			}
 		}
 
