@@ -72,6 +72,7 @@ public:
     /* Renderables */
     olc::Renderable renTestCube;
     olc::Renderable renBrick;
+    olc::Renderable renEarth;
     /* End Reneders */
 
     /* Vectors */
@@ -143,6 +144,8 @@ public:
         renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
         //renBrick.Load("assets/images/GizaHighRes.jpg");
+
+        renEarth.Load("assets/images/EarthCircle.jpeg");
 
         Clear(olc::BLUE);
 

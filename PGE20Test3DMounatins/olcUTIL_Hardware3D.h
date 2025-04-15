@@ -844,51 +844,35 @@ namespace olc::utils::hw3d
 	{
 		olc::utils::hw3d::mesh m;
 
-		//GLfloat vertices[] =
-		//{ //     COORDINATES     /        COLORS      /   TexCoord  //
-		//	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f, X
-		//	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f, X
-		//	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f, X
-		//	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f, 
-		//	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
-		//};
+		auto meshPushBack = [&](vf3d pos, vf2d textCoord, olc::Pixel col = olc::WHITE)
+			{
+				vf3d vf3dNorm = pos.norm();
+				m.pos.push_back({ pos.x, pos.y, pos.z }); 
+				m.uv.push_back({ textCoord.x, textCoord.y });
+				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 }); 
+				m.col.push_back(col);
+			};
 
 		/*				   COORDINATES			|					NORMS        |					TexCoord     |							 COLORS    */
 		// Face 1 
-		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 0 ( Top Point)
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 1
-		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREY); // Position 2
+		meshPushBack({ 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::GREY);	// Position 0 (Top Point)
+		meshPushBack({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, olc::GREY);	// Position 1
+		meshPushBack({ 0.0f, 0.5f, 0.0f }, { 0.0f, 0.0f }, olc::GREY);	// Position 2
 
 		// Face 2
-		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 0 ( Top Point)
-		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 2
-		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::YELLOW); // Position 3
+		meshPushBack({ 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::YELLOW);	// Position 0 ( Top Point)
+		meshPushBack({ 0.0f, 0.5f, 0.0f }, { 0.0f, 0.0f }, olc::YELLOW);	// Position 2
+		meshPushBack({ 0.0f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::YELLOW);	// Position 3
 
 		// Face 3
-		m.pos.push_back({ 0.5f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 0 ( Top Point)
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f, }); m.col.push_back(olc::RED); // Position 1
-		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::RED); // Position 3
+		meshPushBack({ 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::RED);	// Position 0 ( Top Point)
+		meshPushBack({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, olc::RED);	// Position 1
+		meshPushBack({ 0.0f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::RED);	// Position 3
 
 		// Face 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f, }); m.col.push_back(olc::GREEN); // Position 1
-		m.pos.push_back({ 0.0f, 0.5f, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREEN); // Position 2
-		m.pos.push_back({ 0.0f, 0.5f, 0.5f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0.0f, 0.0f }); m.col.push_back(olc::GREEN); // Position 3
-
-
-		//m.pos.push_back({ 0.5f, 0.0f,  0.5f }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 5.0f, 0.0f }); m.col.push_back(olc::GREEN); // Front
-		//m.pos.push_back({ 0.0f, 0.8f,  0.0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 2.5f, 5.0f }); m.col.push_back(olc::CYAN); // Back
-
-		// Indices for vertices order ????
-		/*GLuint indices[] =
-		{
-			0, 1, 2,
-			0, 2, 3,
-			0, 1, 4,
-			1, 2, 4,
-			2, 3, 4,
-			3, 0, 4
-		};*/
-
+		meshPushBack({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, olc::GREEN);	// Position 1
+		meshPushBack({ 0.0f, 0.5f, 0.0f }, { 0.0f, 0.0f }, olc::GREEN); // Position 2
+		meshPushBack({ 0.0f, 0.5f, 0.5f }, { 0.0f, 0.0f }, olc::GREEN); // Position 3
 
 
 		return m;
@@ -901,6 +885,7 @@ namespace olc::utils::hw3d
 	{
 		olc::utils::hw3d::mesh m;
 
+		vf3d vf3dPosition = { 0.0f, 0.0f, 0.0f };
 		switch (TextureType)
 		{
 			case SOLID_TEXTURE:
@@ -1003,34 +988,40 @@ namespace olc::utils::hw3d
 			}
 		}
 
-		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
+		auto meshPushBack = [&](vf3d pos, olc::Pixel col = olc::WHITE)
+			{
+				vf3d vf3dNorm = pos.norm();
+				m.pos.push_back({ pos.x, pos.y, pos.z }); m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 }); m.col.push_back(col);
+			};
 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
+		//Buttom Face has 4 sides therefore 2 trianges (White and Green)
+		meshPushBack({ 0.0f, 0.0f, 0.5f });		// Position 1	
+		meshPushBack({ 0.5f, 0.0f, 0.5f });		// Position 2
+		meshPushBack({ 0.5f, 0.0f, 0.0f });		// Position 3
+
+		meshPushBack({ 0.0f, 0.0f, 0.5f }); 	// Position 1
+		meshPushBack({ 0.5f, 0.0f, 0.0f }); 	// Position 3
+		meshPushBack({ 0.0f, 0.0f, 0.0f });		// Position 4
 
 		// Face 1 
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 2
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		meshPushBack({ 0.0f, 0.0f, 0.5f });		// Position 1
+		meshPushBack({ 0.5f, 0.0f, 0.5f }); 	// Position 2
+		meshPushBack({ 0.25f, 0.25f, 0.25f });	// Position 5 (Top Point)
 
 		// Face 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 2
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 3
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		meshPushBack({ 0.5f, 0.0f, 0.5f }); 	// Position 2
+		meshPushBack({ 0.5f, 0.0f, 0.0f });		// Position 3
+		meshPushBack({ 0.25f, 0.25f, 0.25f }); 	// Position 5 (Top Point)
 
 		// Face 3
-		m.pos.push_back({ 0.5f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 3
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		meshPushBack({ 0.5f, 0.0f, 0.0f }); 	// Position 3
+		meshPushBack({ 0.0f, 0.0f, 0.0f }); 	// Position 4
+		meshPushBack({ 0.25f, 0.25f, 0.25f }); 	// Position 5 (Top Point)
 
 		// Face 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.0f }); m.norm.push_back({ 0, -1, 0, 0 });  m.col.push_back(olc::WHITE);		// Position 4
-		m.pos.push_back({ 0.0f, 0.0f, 0.5f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);		// Position 1
-		m.pos.push_back({ 0.25f, 0.25f, 0.25f }); m.norm.push_back({ 0, -1, 0, 0 }); m.col.push_back(olc::WHITE);	// Position 5 (Top Point)
+		meshPushBack({ 0.0f, 0.0f, 0.0f }); 	// Position 4
+		meshPushBack({ 0.0f, 0.0f, 0.5f });		// Position 1
+		meshPushBack({ 0.25f, 0.25f, 0.25f });	// Position 5 (Top Point)
 
 
 		return m;
@@ -1064,7 +1055,7 @@ namespace olc::utils::hw3d
 		float fHorAnge = 0.0f;
 		float sinHorAnge = 0.0f;
 		float cosHorAnge = 0.0f;
-		float x, y, z;
+		float x, y, z, v, u;
 
 		olc::vf3d vf3dPosition = { 0.0f, 0.0f, 0.0f };
 		olc::vf3d vf3dNormal = { 0.0f, 0.0f, 0.0f };
@@ -1073,6 +1064,7 @@ namespace olc::utils::hw3d
 
 		for (int32_t i = 0; i <= nLatitudeCount; i++)
 		{
+			v = 1 - float(i) / float(nLatitudeCount); // Get the V TextCoord for UV
 			fTheta = i * PI / nLatitudeCount;	// Verical Angle
 			sinTheta = sin(fTheta);
 			cosTheta = cos(fTheta);
@@ -1081,6 +1073,8 @@ namespace olc::utils::hw3d
 			{
 				nCount++;
 				if (nCount >= max) nCount = 0; // Create magical colours
+
+				u = 1 - float(j) / float(nLatitudeCount); // Get the u TextCoord for UV
 
 				fHorAnge = j * 2 * PI / nLongitudeCount; // Horizontal angle
 				sinHorAnge = sin(fHorAnge);
@@ -1095,8 +1089,8 @@ namespace olc::utils::hw3d
 
 				m.pos.push_back({ vf3dPosition.x, vf3dPosition.y, vf3dPosition.z });	// Position
 				m.norm.push_back({ vf3dNormal.x, vf3dNormal.y, vf3dNormal.z, 0 });		// Normals
-				m.uv.push_back({ 0.0, 0.0 });											// Texture Coords
-				m.col.push_back(vecColours[nCount]);									// Colours
+				m.uv.push_back({ u, v });												// Texture Coords
+				m.col.push_back(olc::WHITE);									// Colours
 				
 			}
 		}
