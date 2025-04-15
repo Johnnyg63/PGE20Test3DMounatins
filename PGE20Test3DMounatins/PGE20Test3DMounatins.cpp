@@ -52,6 +52,8 @@ public:
     float fStrifeRoC = 8.5f;    // Strife Rate of Change, thanks: #Boguslavv
     float fForwardRoC = 8.0f;   // Forward/Backwards Rate of Change
 
+    float fSphereRoC = 0.5f;    // Sphere Rate of Change
+    float fSphereRotaotionY = -1.57079633; // Sphere start Y rotation position
 
     float fJump = vf3dOffset.y;     // Monitors jump height so we can land again
     float fJumpRoC = 4.0f;	// fTheta Rate of Change
@@ -194,10 +196,13 @@ public:
 
         mat4SPyrd = mPyramidTrans * mPyramidScale;
 
+       
         // Sphere
+         fSphereRotaotionY += (fSphereRoC * fElapsedTime);
+        if (fSphereRotaotionY > 6.28318531) fSphereRotaotionY = 0;
         mSphereTrans.translate(vf3dSphereLocation);
         mSphereScale.scale(vf3dSphereScale);
-        mSphereRotationY.rotateY(-1.57079633);
+        mSphereRotationY.rotateY(fSphereRotaotionY);
         mSphereRotationZ.rotateZ(3.14159265);
 
         matMSphere = mSphereTrans * mSphereScale *mSphereRotationZ; // Rotate the Sphere into the correct North/South pole position
