@@ -142,7 +142,7 @@ public:
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
         matSphere = olc::utils::hw3d::CreateSphere();
 
-        renTestCube.Load("assets/images/sanity_cube.png");
+        renTestCube.Load("assets/images/sanity_skycube.png");
         renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
         //renBrick.Load("assets/images/GizaHighRes.jpg");
@@ -182,7 +182,7 @@ public:
         mCubeTrans.translate(vf3dSanityCubeOffset);
         mCubeScale.scale(vf3dSanityCubeScale);
 
-        //matCube = mCubeTrans * mCubeScale;
+        matCube = mCubeTrans * mCubeScale;
 
         // Pyramid
         mPyramidTrans.translate(vf3dPyramidLocation);
@@ -265,7 +265,7 @@ public:
 
         
         // renTestCube.Decal()
-        //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
+        HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
