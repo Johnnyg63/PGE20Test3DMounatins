@@ -147,7 +147,7 @@ public:
         //renBrick.Load("assets/images/GizaTest1.png");
         //renBrick.Load("assets/images/GizaHighRes.jpg");
 
-        renEarth.Load("assets/images/WorldTexture3D.jpeg");
+        renEarth.Load("assets/images/WorldTextureHighRes.jpg");
 
         Clear(olc::BLUE);
 
