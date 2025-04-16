@@ -1,6 +1,16 @@
 
+//#define STBI_NO_SIMD // Removes SIMD Support
+// SIMD greatly improves the speed of your game
+#if defined(__arm__)||(__aarch64__)
+
+// Use Advance SIMD NEON when loading images for STB Default is SSE2 (x86)
+#define STBI_NEON
+
+#endif
+
 #define OLC_GFX_OPENGL33
 #define OLC_PGE_APPLICATION
+#define OLC_IMAGE_STB
 #include "olcUTIL_Hardware3D.h"
 #include "olcPixelGameEngine.h"
 #include <immintrin.h> // For AVX/SSE
