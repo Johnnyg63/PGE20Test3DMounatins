@@ -1482,7 +1482,7 @@ namespace olc::utils::hw3d
 				m.col.push_back(col);											// COLOURS
 			};
 
-		// uses the pass face triangle points to create our output mesh
+		// Uses the past face triangle positions to create our output mesh
 		auto createOutPutMesh = [&](std::vector<int> vecPosition)
 			{
 				for (auto p : vecPosition)

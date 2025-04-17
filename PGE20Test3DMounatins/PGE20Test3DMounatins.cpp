@@ -165,11 +165,12 @@ public:
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
         matSphere = olc::utils::hw3d::CreateSphere();
         matSkyCube = olc::utils::hw3d::CreateSkyCube(olc::utils::hw3d::LEFT_CROSS_TEXTURE_RECT_MAP);
+        //matSkyCube = olc::utils::hw3d::CreateHW3DSkyCube();
 
         renTestCube.Load("assets/images/sanity_cube.png");
 
-        //renSkyCube.Load("assets/images/sanity_skycube.png");
-        renSkyCube.Load("assets/images/DaylightBoxUV.png");
+        renSkyCube.Load("assets/images/TestLarge.jpg");
+        //renSkyCube.Load("assets/images/DaylightBoxUV.png");
         
         //renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
@@ -190,7 +191,8 @@ public:
         centreScreenPos.x = centreScreenPos.x / 2;
         centreScreenPos.y = centreScreenPos.y / 2;
 
-        // SkyCube 
+        // SkyCube
+        // TODO: Need to move this to a new area....
         sSkyCubeProps.renRight.Load("assets/images/skybox/right.jpg");
         sSkyCubeProps.renLeft.Load("assets/images/skybox/left.jpg");
         sSkyCubeProps.renTop.Load("assets/images/skybox/top.jpg");
@@ -289,7 +291,7 @@ public:
         }
 
 
-        HW3D_DrawSkyCube(mSkyCube.m, &sSkyCubeProps, matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
+        //HW3D_DrawSkyCube(mSkyCube.m, &sSkyCubeProps, matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
 
         // Draw Skycube first
         HW3D_DrawObject((matWorld * mSkyCube).m, renSkyCube.Decal(), matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
