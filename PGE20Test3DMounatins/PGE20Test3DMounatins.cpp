@@ -42,8 +42,8 @@ public:
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
     olc::vf3d vf3dSanityCubeScale = { 600.0f, 600.0f, 600.0f };     // vf3d SanityCube Scale (in sort its Size)
-    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 10.0f, 0.0f };       // vf3d SanityCube Location 
-    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -200.0f, -200.0f }; // vf3d SanityCube Offset
+    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 0.0f, 0.0f };       // vf3d SanityCube Location 
+    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -300.0f, -200.0f }; // vf3d SanityCube Offset
 
     olc::vf3d vf3dPyramidScale = { 30.0f, 50.0f, 30.0f };   // vf3d Pyramid Scale (in sort its Size)
     olc::vf3d vf3dPyramidLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Pyramid Location 
@@ -153,9 +153,9 @@ public:
         matSphere = olc::utils::hw3d::CreateSphere();
 
         renTestCube.Load("assets/images/sanity_skycube.png");
-        renBrick.Load("assets/images/Brick.png");
+        //renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
-        //renBrick.Load("assets/images/GizaHighRes.jpg");
+        renBrick.Load("assets/images/GizaHighRes.jpg");
 
         renEarth.Load("assets/images/WorldTextureHighRes.jpg");
 
@@ -188,11 +188,6 @@ public:
         olc::mf4d mPosition, mCollision;
         olc::mf4d mMovement, mOffset;
 
-        // Sanity Cube
-        mCubeTrans.translate(vf3dSanityCubeOffset);
-        mCubeScale.scale(vf3dSanityCubeScale);
-
-        matCube = mCubeTrans * mCubeScale;
 
         // Pyramid
         mPyramidTrans.translate(vf3dPyramidLocation);
@@ -234,6 +229,12 @@ public:
         Cam3D.Update();
         matWorld = Cam3D.GetViewMatrix();
 
+
+        mCubeTrans.translate(vf3dSanityCubeOffset + Cam3D.GetPosition());
+        mCubeScale.scale(vf3dSanityCubeScale);
+
+        matCube = mCubeTrans * mCubeScale;
+
         // Manage forward / backwards
         vf3dForward = vf3dLookDir * (fForwardRoC * fElapsedTime);
 
@@ -263,17 +264,16 @@ public:
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        //HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        // HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+        HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
 
-        HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
+        //HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 
-        
         // renTestCube.Decal()
         HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
