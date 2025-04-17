@@ -697,14 +697,14 @@ namespace olc::utils::hw3d
 	*/
 	enum SKYCUBE_TEXTURE_TYPE {
 
-		SOLID_TEXTURE = 0,
+		TEXTURE = 0,
 		LEFT_CROSS_TEXTURE_CUBE_MAP,
 		LEFT_CROSS_TEXTURE_RECT_MAP,
 		VERT_TEXTURE_MAP,
 		HORZ_TEXTURE_MAP
 
 
-	} SphereTextureType;
+	} SkyCubeTextureType;
 
 
 	// Some Const
@@ -1189,7 +1189,7 @@ namespace olc::utils::hw3d
 	/*
 	* Creates a SkyCube
 	* renTexture: olc::Renderable
-	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_MAP, RIGHT_CROSS_TEXTURE_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
+	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_CUBE_MAP, LEFT_CROSS_TEXTURE_RECT_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
 	*/
 	olc::utils::hw3d::mesh CreateSkyCube(SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
 	{
@@ -1354,7 +1354,7 @@ namespace olc::utils::hw3d
 			}
 			break;
 		}
-		case SKYCUBE_TEXTURE_TYPE::SOLID_TEXTURE:
+		case SKYCUBE_TEXTURE_TYPE::TEXTURE:
 		default:
 		{
 			// For a solid texture, South, East, North, West, Top and Bottom all have the same Text Coords

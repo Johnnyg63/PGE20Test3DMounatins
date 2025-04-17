@@ -28,8 +28,9 @@ public:
     olc::mf4d matWorld;
     olc::mf4d matView;
     olc::mf4d matCube;
+    olc::mf4d mSkyCube;
     olc::mf4d mat3SPyrd;
-    olc::mf4d mat4SPyrd;
+    olc::mf4d matPyrd;
     olc::mf4d matMSphere;
     olc::mf4d matProject;
     olc::utils::hw3d::mesh meshMountain;
@@ -41,9 +42,13 @@ public:
     olc::vf3d vf3dOffset = { 5.0f, 5.0f, 20.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
-    olc::vf3d vf3dSanityCubeScale = { 600.0f, 600.0f, 600.0f };     // vf3d SanityCube Scale (in sort its Size)
-    olc::vf3d vf3dSanityCubeLocation = { 0.0f, 0.0f, 0.0f };       // vf3d SanityCube Location 
-    olc::vf3d vf3dSanityCubeOffset = { -200.0f, -300.0f, -200.0f }; // vf3d SanityCube Offset
+    olc::vf3d vf3dSanityCubeScale = { 2.0f, 2.0f, 2.0f };        // vf3d SanityCube Scale (in sort its Size)
+    olc::vf3d vf3dSanityCubeLocation = { 10.0f, 0.0f, 0.0f };   // vf3d SanityCube Location 
+    olc::vf3d vf3dSanityCubeOffset = { 0.0f, 0.0f, 0.0f };      // vf3d SanityCube Offset
+
+    olc::vf3d vf3dSkyCubeScale = { 600.0f, 600.0f, 600.0f };     // vf3d SkyCube Scale (in sort its Size)
+    olc::vf3d vf3dSkyCubeLocation = { 0.0f, 0.0f, 0.0f };       // vf3d SkyCube Location 
+    olc::vf3d vf3dSkyCubeOffset = { -200.0f, -300.0f, -200.0f }; // vf3d SkyCube Offset
 
     olc::vf3d vf3dPyramidScale = { 30.0f, 50.0f, 30.0f };   // vf3d Pyramid Scale (in sort its Size)
     olc::vf3d vf3dPyramidLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Pyramid Location 
@@ -85,6 +90,7 @@ public:
     olc::Renderable renTestCube;
     olc::Renderable renBrick;
     olc::Renderable renEarth;
+    olc::Renderable renSkyCube;
     /* End Reneders */
 
     /* Vectors */
@@ -108,6 +114,7 @@ public:
 
     // Sanity Cube
     olc::utils::hw3d::mesh matSanityCube;
+    olc::utils::hw3d::mesh matSkyCube;
     olc::utils::hw3d::mesh matTriange;
     olc::utils::hw3d::mesh matPyramid;
     olc::utils::hw3d::mesh mat4SPyramid;
@@ -151,8 +158,13 @@ public:
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
         matSphere = olc::utils::hw3d::CreateSphere();
+        matSkyCube = olc::utils::hw3d::CreateSkyCube(olc::utils::hw3d::LEFT_CROSS_TEXTURE_RECT_MAP);
 
-        renTestCube.Load("assets/images/sanity_skycube.png");
+        renTestCube.Load("assets/images/sanity_cube.png");
+
+        //renSkyCube.Load("assets/images/sanity_skycube.png");
+        renSkyCube.Load("assets/images/TestLarge.jpg");
+        
         //renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
         renBrick.Load("assets/images/GizaHighRes.jpg");
@@ -183,6 +195,7 @@ public:
         // New code:
         olc::mf4d mRotationX, mRotationY, mRotationZ;  // Rotation Matrices
         olc::mf4d mCubeTrans, mCubeScale;
+        olc::mf4d mSkyCubeTrans, mSkyCubeScale;
         olc::mf4d mPyramidTrans, mPyramidScale, mPyramidRotationX, mPyramidRotationY, mPyramidRotationZ;
         olc::mf4d mSphereTrans, mSphereScale, mSphereRotationX, mSphereRotationY, mSphereRotationZ;
         olc::mf4d mPosition, mCollision;
@@ -199,7 +212,7 @@ public:
 
         mat3SPyrd = mPyramidTrans * mPyramidScale * mPyramidRotationX;
 
-        mat4SPyrd = mPyramidTrans * mPyramidScale;
+        matPyrd = mPyramidTrans * mPyramidScale;
 
        
         // Sphere
@@ -229,11 +242,11 @@ public:
         Cam3D.Update();
         matWorld = Cam3D.GetViewMatrix();
 
+        // SkyCube
+        mSkyCubeTrans.translate(vf3dSkyCubeOffset + Cam3D.GetPosition());
+        mSkyCubeScale.scale(vf3dSkyCubeScale);
 
-        mCubeTrans.translate(vf3dSanityCubeOffset + Cam3D.GetPosition());
-        mCubeScale.scale(vf3dSanityCubeScale);
-
-        matCube = mCubeTrans * mCubeScale;
+        mSkyCube = mSkyCubeTrans * mSkyCubeScale;
 
         // Manage forward / backwards
         vf3dForward = vf3dLookDir * (fForwardRoC * fElapsedTime);
@@ -259,6 +272,8 @@ public:
             meshMountain.col[i + 2] = pixIllum;
         }
 
+        // Draw Skycube first
+        HW3D_DrawObject((matWorld * mSkyCube).m, renSkyCube.Decal(), matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
         
         HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
@@ -270,12 +285,12 @@ public:
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject((matWorld * mat4SPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+        HW3D_DrawObject((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
 
         //HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 
         // renTestCube.Decal()
-        HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
+        //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
 
         // Draw Logo
         DrawDecal({ 5.0f, (float)ScreenHeight() - 100 }, decOLCPGEMobLogo, { 0.5f, 0.5f });
