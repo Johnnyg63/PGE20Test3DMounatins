@@ -1189,6 +1189,21 @@ namespace olc
 		CCW = 2
 	};
 
+	/*
+	* Stores data needed for PGE Engine and GPU to render SkyCube using hardware only
+	*/
+	struct SkyCubeProperties
+	{
+		olc::Renderable renRight;
+		olc::Renderable renLeft;
+		olc::Renderable renTop;
+		olc::Renderable renBottom;
+		olc::Renderable renFront;
+		olc::Renderable renBack;
+
+	};
+
+
 	struct GPUTask
 	{
 		//   x      y      z      w      u      v       rgb
@@ -1208,6 +1223,29 @@ namespace olc
 		olc::Pixel tint = olc::WHITE;
 	};
 
+	/*
+	*  GPU Task used for creating Sky Cubes
+	*/
+	struct GPUSkyCubeTask
+	{
+		//   x      y      z      w      u      v       rgb
+		struct Vertex { float p[6]; uint32_t c; };
+		std::vector<Vertex> vb;
+		olc::Decal* decal = nullptr;
+		olc::DecalStructure structure = olc::DecalStructure::FAN;
+		olc::DecalMode mode = olc::DecalMode::NORMAL;
+		bool depth = false;
+		std::array<float, 16> mvp = { {
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1
+			} };
+		olc::CullMode cull = olc::CullMode::NONE;
+		olc::Pixel tint = olc::WHITE;
+		SkyCubeProperties* SkyCubeProps = nullptr;
+	};
+
 	struct LayerDesc
 	{
 		olc::vf2d vOffset = { 0, 0 };
@@ -1217,9 +1255,11 @@ namespace olc
 		olc::Renderable pDrawTarget;
 		uint32_t nResID = 0;
 		std::vector<DecalInstance> vecDecalInstance;
-		std::vector<GPUTask> vecGPUTasks;
+		std::vector<GPUTask> vecGPUTasks;				// Vector of standard GPU Task
 		olc::Pixel tint = olc::WHITE;
 		std::function<void()> funcHook = nullptr;
+
+		std::vector<GPUSkyCubeTask> vecGPUSkyCubeTasks; // Vector of SkyCube GPU Tasks
 	};
 
 	class Renderer
@@ -1514,6 +1554,7 @@ namespace olc
 		void UpdateTextEntry();
 		void UpdateConsole();
 
+
 	public:
 		// HW3D - Lightweight 3D Rendering 
 		// Set Manual Projection Matrix
@@ -1522,6 +1563,23 @@ namespace olc
 		void HW3D_EnableDepthTest(const bool bEnableDepth);
 		// 3D Rendering cull faces depending on winding order
 		void HW3D_SetCullMode(const olc::CullMode mode);
+
+		/*
+		* Draws a 3D SkyCube Mesh structure
+		* Note: Sky Cubes use a different type of a GPUTask (GPUSkyCubeTask): 
+		*		The Z value is always 1
+		*		Depth Buffer is automatically disabled and the reset to PGE last state (Enabled/ Disabled)
+		*		GPUSkyCubeTask have their own VBA, VBO and Engine code to ensure the SkyCube is correctly renedered
+		*		GPUSkyCubeTasks are always renender first.
+		*		ONLY use this function when you need to create SkyCubes aka Skyboxes 
+		*/
+		void HW3D_DrawSkyCube(const std::array<float, 16>& matModelView,
+			olc::SkyCubeProperties* SkyCubeProps,
+			const olc::DecalStructure layout,
+			const std::vector<std::array<float, 4>>& pos,
+			const std::vector<std::array<float, 2>>& uv,
+			const std::vector<olc::Pixel>& col,
+			const olc::Pixel tint = olc::WHITE);
 
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure)
 		void HW3D_DrawObject(
@@ -1546,6 +1604,8 @@ namespace olc
 			const std::array<float, 4>& pos,
 			const std::array<float, 4>& size,
 			const olc::Pixel col = olc::WHITE);
+
+	
 
 	public: // Branding
 		std::string sAppName;
@@ -3528,6 +3588,32 @@ namespace olc
 	void PixelGameEngine::HW3D_SetCullMode(const olc::CullMode mode)
 	{
 		nHW3DCullMode = mode;
+	}
+
+	void olc::PixelGameEngine::HW3D_DrawSkyCube(const std::array<float, 16>& matModelView,
+		olc::SkyCubeProperties* SkyCubeProps,
+		const olc::DecalStructure layout,
+		const std::vector<std::array<float, 4>>& pos,
+		const std::vector<std::array<float, 2>>& uv,
+		const std::vector<olc::Pixel>& col,
+		const olc::Pixel tint)
+	{
+		GPUSkyCubeTask task;
+		task.decal = SkyCubeProps->renFront.Decal();
+		task.mode = nDecalMode;
+		task.structure = layout;
+		task.depth = bHW3DDepthTest; // Todo may need to force this to false
+		task.cull = nHW3DCullMode;
+		task.mvp = matModelView;
+		task.tint = tint;
+		task.vb.resize(pos.size());
+
+		task.SkyCubeProps = SkyCubeProps;
+
+		for (size_t i = 0; i < pos.size(); i++)
+			task.vb[i] = { pos[i][0], pos[i][1], pos[i][2], 1.0f, uv[i][0], uv[i][1], col[i].n };
+
+		vLayers[nTargetLayer].vecGPUSkyCubeTasks.push_back(task);  // John Galvin
 	}
 
 	void PixelGameEngine::HW3D_DrawObject(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const olc::Pixel tint)

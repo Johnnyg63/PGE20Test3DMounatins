@@ -707,9 +707,27 @@ namespace olc::utils::hw3d
 	} SkyCubeTextureType;
 
 
+	/*
+	* Stores data needed for PGE Engine and GPU to render SkyCube using hardware only
+	*/
+	/*struct sSkyCubeProperties
+	{
+		olc::Renderable renRight;
+		olc::Renderable renLeft;
+		olc::Renderable renTop;
+		olc::Renderable renBottom;
+		olc::Renderable renFront;
+		olc::Renderable renBack;
+
+	};*/
+
+
 	// Some Const
 	const double PI = 3.141592653589793;
 
+	/*
+	* Create the Sanity Cube.... you will use this alot ;)
+	*/
 	olc::utils::hw3d::mesh CreateSanityCube()
 	{
 		olc::utils::hw3d::mesh m;
@@ -765,6 +783,9 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
+	/*
+	* Create a simple cube by Size and Offset 
+	*/
 	olc::utils::hw3d::mesh CreateCube(const olc::vf3d& vSize, const olc::vf3d& vOffset = { 0,0,0 })
 	{
 		olc::utils::hw3d::mesh m;
@@ -839,6 +860,10 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
+
+	/*
+	* Creates the all glorious triangle
+	*/
 	olc::utils::hw3d::mesh CreateTriangle()
 	{
 		olc::utils::hw3d::mesh m;
@@ -857,6 +882,9 @@ namespace olc::utils::hw3d
 
 	}
 
+	/*
+	* Creates a 3 Sided Pyramid
+	*/
 	olc::utils::hw3d::mesh Create3SidedPyramid()
 	{
 		olc::utils::hw3d::mesh m;
@@ -1045,6 +1073,9 @@ namespace olc::utils::hw3d
 
 	/*
 	* Creates a Sphere
+	* fRadius : in Mesh unit size,
+	* nLatitudeCount : Latitude number of rings 
+	* nLatitudeCount : nLongitudeCount number of rings 
 	*/
 	olc::utils::hw3d::mesh CreateSphere(float fRadius = 0.5, int32_t nLatitudeCount = 50, int32_t nLongitudeCount = 50)
 	{
@@ -1063,8 +1094,8 @@ namespace olc::utils::hw3d
 
 		for (int32_t i = 0; i <= nLatitudeCount; i++)
 		{
-			v = 1 - float(i) / float(nLatitudeCount); // Get the V TextCoord for UV
-			fTheta = i * PI / nLatitudeCount;	// Verical Angle
+			v = 1 - float(i) / float(nLatitudeCount);	// Get the V TextCoord for UV
+			fTheta = i * PI / nLatitudeCount;			// Verical Angle
 			sinTheta = sin(fTheta);
 			cosTheta = cos(fTheta);
 

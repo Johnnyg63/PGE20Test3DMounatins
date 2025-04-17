@@ -93,6 +93,12 @@ public:
     olc::Renderable renSkyCube;
     /* End Reneders */
 
+    /* SkyCube Stuff*/
+    olc::SkyCubeProperties sSkyCubeProps;
+    /* End SkyCube Stuff*/
+
+
+
     /* Vectors */
     std::vector<std::string> vecMessages;
     /* END Vectors*/
@@ -163,7 +169,7 @@ public:
         renTestCube.Load("assets/images/sanity_cube.png");
 
         //renSkyCube.Load("assets/images/sanity_skycube.png");
-        renSkyCube.Load("assets/images/TestLarge.jpg");
+        renSkyCube.Load("assets/images/DaylightBoxUV.png");
         
         //renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
@@ -183,6 +189,16 @@ public:
         centreScreenPos = GetScreenSize();
         centreScreenPos.x = centreScreenPos.x / 2;
         centreScreenPos.y = centreScreenPos.y / 2;
+
+        // SkyCube 
+        sSkyCubeProps.renRight.Load("assets/images/skybox/right.jpg");
+        sSkyCubeProps.renLeft.Load("assets/images/skybox/left.jpg");
+        sSkyCubeProps.renTop.Load("assets/images/skybox/top.jpg");
+        sSkyCubeProps.renBottom.Load("assets/images/skybox/bottom.jpg");
+        sSkyCubeProps.renFront.Load("assets/images/skybox/front.jpg");
+        sSkyCubeProps.renBack.Load("assets/images/skybox/back.jpg");
+
+
 
         // Called once at the start, so create things here
 		return true;
@@ -271,6 +287,9 @@ public:
             meshMountain.col[i + 1] = pixIllum;
             meshMountain.col[i + 2] = pixIllum;
         }
+
+
+        HW3D_DrawSkyCube(mSkyCube.m, &sSkyCubeProps, matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
 
         // Draw Skycube first
         HW3D_DrawObject((matWorld * mSkyCube).m, renSkyCube.Decal(), matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
