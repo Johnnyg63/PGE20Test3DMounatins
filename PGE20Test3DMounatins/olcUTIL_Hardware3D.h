@@ -681,13 +681,30 @@ namespace olc::utils::hw3d
 		olc::DecalStructure layout = olc::DecalStructure::LIST;
 	};
 
-	enum TEXTURE_TYPE {
+	/*
+	* Texture type for spheres only
+	*/
+	enum SPHERE_TEXTURE_TYPE {
 
 		SOLID_TEXTURE = 0,
 		TOP_DOWN_VIEW,
 		TEXTURE_MAP
 
-	} TextureType;
+	} SphereTextureType;
+
+	/*
+	* Texture type for SkyCub only
+	*/
+	enum SKYCUBE_TEXTURE_TYPE {
+
+		SOLID_TEXTURE = 0,
+		LEFT_CROSS_TEXTURE_CUBE_MAP,
+		LEFT_CROSS_TEXTURE_RECT_MAP,
+		VERT_TEXTURE_MAP,
+		HORZ_TEXTURE_MAP
+
+
+	} SphereTextureType;
 
 
 	// Some Const
@@ -698,52 +715,52 @@ namespace olc::utils::hw3d
 		olc::utils::hw3d::mesh m;
 
 		// South
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.25, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.5, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.5, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.25, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.5, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 0, -1, 0 });	m.uv.push_back({ 0.25, 0.25 });	m.col.push_back(olc::WHITE);
 
 		// East
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.5, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.75, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.75, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.5, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.75, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 1, 0, 0, 0 });	m.uv.push_back({ 0.5, 0.25 });	m.col.push_back(olc::WHITE);
 
 		// North
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 0.75, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 1.0, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 1.0, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 0.75, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 1.0, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 0, 1, 0 });	m.uv.push_back({ 0.75, 0.25 });	m.col.push_back(olc::WHITE);
 
 		// West
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.0, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.25, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.25, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.0, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.25, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ -1, 0, 0, 0 });	m.uv.push_back({ 0.0, 0.25 });	m.col.push_back(olc::WHITE);
 
 		// Top
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.25, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.5, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.5, 0.0 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.25, 0.25 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.5, 0.0 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 1, 0, 0 });	m.uv.push_back({ 0.25, 0.0 });	m.col.push_back(olc::WHITE);
 
 		// Bottom
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.25, 0.75 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.5, 0.75 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.5, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.25, 0.75 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.5, 0.5 });	m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, -1, 0, 0 });	m.uv.push_back({ 0.25, 0.5 });	m.col.push_back(olc::WHITE);
 
 		return m;
 	}
@@ -834,13 +851,13 @@ namespace olc::utils::hw3d
 
 		// Upper Right corner
 		m.pos.push_back({ 0.5f, 0.0f * float(sqrt(3)) * 2 / 3, 0.0f }); m.norm.push_back({ 0, 0, 0, 0 }); m.uv.push_back({ 0, 0 }); m.col.push_back(olc::WHITE);
-		
+
 		return m;
 
 
 	}
 
-	olc::utils::hw3d::mesh Create3SidedPyramid() 
+	olc::utils::hw3d::mesh Create3SidedPyramid()
 	{
 		olc::utils::hw3d::mesh m;
 
@@ -880,111 +897,111 @@ namespace olc::utils::hw3d
 	/*
 	* Creates a Square Pyramind
 	*/
-	olc::utils::hw3d::mesh Create4SidedPyramid(TEXTURE_TYPE TextureType = SOLID_TEXTURE)
+	olc::utils::hw3d::mesh Create4SidedPyramid(SPHERE_TEXTURE_TYPE SphereTextureType = SPHERE_TEXTURE_TYPE::SOLID_TEXTURE)
 	{
 		olc::utils::hw3d::mesh m;
 
 		vf3d vf3dPosition = { 0.0f, 0.0f, 0.0f };
-		switch (TextureType)
+		switch (SphereTextureType)
 		{
-			case SOLID_TEXTURE:
-			{
-				// Buttom Face, 2 Triangles
-				m.uv.push_back({ 0.0f, 0.0f });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f }); // Position 2
-				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+		case SOLID_TEXTURE:
+		{
+			// Buttom Face, 2 Triangles
+			m.uv.push_back({ 0.0f, 0.0f });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f }); // Position 2
+			m.uv.push_back({ 1.0f, 1.0f }); // Position 3
 
-				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
-				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
-				m.uv.push_back({ 0.0f, 1.0f }); // Position 4
+			m.uv.push_back({ 0.0f, 0.0f }); // Position 1
+			m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+			m.uv.push_back({ 0.0f, 1.0f }); // Position 4
 
-				// Face 1
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+			// Face 1
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
 
-				// Face 2
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+			// Face 2
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
 
-				// Face 3
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+			// Face 3
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
 
-				// Face 4
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
-				break;
-			}
-			case TOP_DOWN_VIEW:
-			{
-				// Buttom Face, 2 Triangles
-				m.uv.push_back({ 0.0f, 0.0f });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f }); // Position 2
-				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+			// Face 4
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+			break;
+		}
+		case TOP_DOWN_VIEW:
+		{
+			// Buttom Face, 2 Triangles
+			m.uv.push_back({ 0.0f, 0.0f });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f }); // Position 2
+			m.uv.push_back({ 1.0f, 1.0f }); // Position 3
 
-				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
-				m.uv.push_back({ 1.0f, 1.0f }); // Position 3
-				m.uv.push_back({ 0.0f, 1.0f }); // Position 4
+			m.uv.push_back({ 0.0f, 0.0f }); // Position 1
+			m.uv.push_back({ 1.0f, 1.0f }); // Position 3
+			m.uv.push_back({ 0.0f, 1.0f }); // Position 4
 
-				// Face 1
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
+			// Face 1
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 0.5, 0.5 });	// Position 5 (Top Point)
 
-				// Face 2
-				m.uv.push_back({ 1.0f, 0.0f });	// Position 2
-				m.uv.push_back({ 1.0f, 1.0f });	// Position 3
-				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+			// Face 2
+			m.uv.push_back({ 1.0f, 0.0f });	// Position 2
+			m.uv.push_back({ 1.0f, 1.0f });	// Position 3
+			m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
 
-				// Face 3
-				m.uv.push_back({ 1.0f, 1.0f });	// Position 3
-				m.uv.push_back({ 0.0f, 1.0f });	// Position 4
-				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+			// Face 3
+			m.uv.push_back({ 1.0f, 1.0f });	// Position 3
+			m.uv.push_back({ 0.0f, 1.0f });	// Position 4
+			m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
 
-				// Face 4
-				m.uv.push_back({ 0.0f, 1.0f });	// Position 4
-				m.uv.push_back({ 0.0, 0.0 });	// Position 1
-				m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
+			// Face 4
+			m.uv.push_back({ 0.0f, 1.0f });	// Position 4
+			m.uv.push_back({ 0.0, 0.0 });	// Position 1
+			m.uv.push_back({ 0.5f, 0.5f }); // Position 5 (Top Point)
 
-				break;
-			}
-			case TEXTURE_MAP:
-			default:
-			{
-				// Buttom Face, 2 Triangles
-				m.uv.push_back({ 0.34f, 0.333333f });	// Position 1
-				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
-				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+			break;
+		}
+		case TEXTURE_MAP:
+		default:
+		{
+			// Buttom Face, 2 Triangles
+			m.uv.push_back({ 0.34f, 0.333333f });	// Position 1
+			m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+			m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
 
-				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
-				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
-				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+			m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+			m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+			m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
 
-				// Face 1
-				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
-				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
-				m.uv.push_back({ 0.5f, 0.0f });		// Position
+			// Face 1
+			m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+			m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+			m.uv.push_back({ 0.5f, 0.0f });		// Position
 
-				// Face 2
-				m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
-				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
-				m.uv.push_back({ 1.0f, 0.5f });		// Position		
+			// Face 2
+			m.uv.push_back({ 0.666666f, 0.333333f });	// Position 2
+			m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+			m.uv.push_back({ 1.0f, 0.5f });		// Position		
 
-				// Face 3
-				m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
-				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
-				m.uv.push_back({ 0.5f, 1.0f });		// Position 
+			// Face 3
+			m.uv.push_back({ 0.666666f, 0.666666f });	// Position 3
+			m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+			m.uv.push_back({ 0.5f, 1.0f });		// Position 
 
-				// Face 4
-				m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
-				m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
-				m.uv.push_back({ 0.0f, 0.5f }); // Position 5 (Top Point)
-				break;
-			}
+			// Face 4
+			m.uv.push_back({ 0.333333f, 0.666666f });	// Position 4
+			m.uv.push_back({ 0.333333f, 0.333333f });	// Position 1
+			m.uv.push_back({ 0.0f, 0.5f }); // Position 5 (Top Point)
+			break;
+		}
 		}
 
 		auto meshPushBack = [&](vf3d pos, olc::Pixel col = olc::WHITE)
@@ -1050,7 +1067,7 @@ namespace olc::utils::hw3d
 			fTheta = i * PI / nLatitudeCount;	// Verical Angle
 			sinTheta = sin(fTheta);
 			cosTheta = cos(fTheta);
-			
+
 			for (int32_t j = 0; j <= nLongitudeCount; j++)
 			{
 				u = 1 - float(j) / float(nLatitudeCount); // Get the u TextCoord for UV
@@ -1066,7 +1083,7 @@ namespace olc::utils::hw3d
 				mTemp.pos.push_back({ vf3dPosition.x, vf3dPosition.y, vf3dPosition.z });	// Position
 				mTemp.uv.push_back({ u, v });												// Texture Coords
 				mTemp.col.push_back(olc::WHITE);											// Colours
-				
+
 			}
 		}
 
@@ -1106,13 +1123,13 @@ namespace olc::utils::hw3d
 				pos3 = nextY * stride + nextX;
 
 				// Face 1
-				
+
 				// Position 0
 				meshPushBack
 				(
 					{ mTemp.pos[pos0][0], mTemp.pos[pos0][1], mTemp.pos[pos0][2] },
-					{ mTemp.uv[pos0][0], mTemp.uv[pos0][1]},
-					mTemp.col[pos0]				
+					{ mTemp.uv[pos0][0], mTemp.uv[pos0][1] },
+					mTemp.col[pos0]
 				);
 
 				// Position 1
@@ -1157,7 +1174,7 @@ namespace olc::utils::hw3d
 					mTemp.col[pos3]
 				);
 
-				
+
 			}
 		}
 
@@ -1168,6 +1185,250 @@ namespace olc::utils::hw3d
 		mTemp.uv.clear();
 		return m;
 	}
+
+	olc::utils::hw3d::mesh CreateSkyCube(std::string strTextureImage, SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_MAP)
+	{
+		olc::Renderable* renTexture;
+		renTexture->Load(strTextureImage);
+		CreateSkyCube(renTexture, SkyCubeTextureType);
+	}
+
+	/*
+	* Creates a SkyCube
+	* renTexture: olc::Renderable
+	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_MAP, RIGHT_CROSS_TEXTURE_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
+	*/
+	olc::utils::hw3d::mesh CreateSkyCube(olc::Renderable* renTexture, SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
+	{
+		olc::utils::hw3d::mesh m;
+
+		//   Coordinates
+		//        7--------6
+		//       /|       /|
+		//      4--------5 |
+		//      | |      | |
+		//      | 3------|-2
+		//      |/       |/
+		//      0--------1
+
+
+		auto meshPushBack = [&](vf3d pos, olc::Pixel col = olc::WHITE)
+			{
+				vf3d vf3dNorm = pos.norm();
+				m.pos.push_back({ pos.x, pos.y, pos.z }); 
+				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 }); 
+				m.col.push_back(col);
+			};
+
+
+		// 1: Lets see what we are dealing with
+
+		switch (SkyCubeTextureType)
+		{
+
+		case SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP:
+		{
+			m = CreateSanityCube();
+			return m;
+			break;
+		}
+
+		case SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_RECT_MAP:
+		{
+			/*
+			* Notes for a Rect Map the x value never changes, just the y
+			* 
+			*  __________
+			* |   **     |
+			* | ******** |
+			* |   **     |
+			*  ----------
+			*/
+
+			// South
+			m.uv.push_back({ 0.25, 0.66666f });
+			m.uv.push_back({ 0.5, 0.66666f });
+			m.uv.push_back({ 0.5, 0.33333f });
+			m.uv.push_back({ 0.25, 0.66666f });
+			m.uv.push_back({ 0.5, 0.33333f });
+			m.uv.push_back({ 0.25, 0.33333f });
+
+			// East
+			m.uv.push_back({ 0.5, 0.66666f });
+			m.uv.push_back({ 0.75, 0.66666f });
+			m.uv.push_back({ 0.75, 0.33333f });
+			m.uv.push_back({ 0.5, 0.66666f });
+			m.uv.push_back({ 0.75, 0.33333f });
+			m.uv.push_back({ 0.5, 0.33333f });
+
+			// North
+			m.uv.push_back({ 0.75, 0.66666f });
+			m.uv.push_back({ 1.0, 0.66666f });
+			m.uv.push_back({ 1.0, 0.33333f });
+			m.uv.push_back({ 0.75, 0.66666f });
+			m.uv.push_back({ 1.0, 0.33333f });
+			m.uv.push_back({ 0.75, 0.33333f });
+
+			// West
+			m.uv.push_back({ 0.0, 0.66666f });
+			m.uv.push_back({ 0.25, 0.66666f });
+			m.uv.push_back({ 0.25, 0.33333f });
+			m.uv.push_back({ 0.0, 0.66666f });
+			m.uv.push_back({ 0.25, 0.33333f });
+			m.uv.push_back({ 0.0, 0.33333f });
+
+			// Top
+			m.uv.push_back({ 0.25, 0.33333f });
+			m.uv.push_back({ 0.5, 0.33333f });
+			m.uv.push_back({ 0.5, 0.0 });
+			m.uv.push_back({ 0.25, 0.33333f });
+			m.uv.push_back({ 0.5, 0.0 });
+			m.uv.push_back({ 0.25, 0.0 });
+
+			// Bottom
+			m.uv.push_back({ 0.25, 1.0f });
+			m.uv.push_back({ 0.5, 1.0f });
+			m.uv.push_back({ 0.5, 0.66666f });
+			m.uv.push_back({ 0.25, 1.0f });
+			m.uv.push_back({ 0.5, 0.66666f });
+			m.uv.push_back({ 0.25, 0.66666f });
+
+			break;
+		}
+
+		case SKYCUBE_TEXTURE_TYPE::VERT_TEXTURE_MAP:
+		{
+			// For a vertical texture, x remains the same, y increase
+			float y = 1 / 6;
+			for (int8_t i = 0; i < 5; i++)
+			{
+				float fY = y * i;
+				m.uv.push_back({ 0.0f,	fY });		// Position 1
+				m.uv.push_back({ 1.0f,	fY });		// Position 2
+				m.uv.push_back({ 0.0,	fY + y });	// Position 3
+				m.uv.push_back({ 1.0f,	fY});		// Position 2
+				m.uv.push_back({ 0.0,	fY + y });	// Position 3
+				m.uv.push_back({ 1.0f,	fY + y });	// Position 4
+				
+			}
+			break;
+		}
+		case SKYCUBE_TEXTURE_TYPE::HORZ_TEXTURE_MAP:
+		{
+			// For a horz texture, y remains the same, x increase
+			float x = 1 / 6;
+			for (int8_t i = 0; i < 5; i++)
+			{
+				float fX = x * i;
+
+				m.uv.push_back({ fX,		0.0f });	// Position 1
+				m.uv.push_back({ fX + x,	0.0 });		// Position 2
+				m.uv.push_back({ fX,		1.0f });	// Position 3
+				m.uv.push_back({ fX + x,	0.0 });		// Position 2
+				m.uv.push_back({ fX,		1.0f });	// Position 3
+				m.uv.push_back({ fX + x,	1.0f });	// Position 4
+
+			}
+			break;
+		}
+		case SKYCUBE_TEXTURE_TYPE::SOLID_TEXTURE:
+		default:
+		{
+			// For a solid texture, South, East, North, West, Top and Bottom all have the same Text Coords
+			for (int8_t i = 0; i < 5; i++)
+			{	
+				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
+				m.uv.push_back({ 1.0f, 0.0 });	// Position 2
+				m.uv.push_back({ 0.0, 1.0 });	// Position 3
+				m.uv.push_back({ 1.0f, 0.0 });	// Position 2
+				m.uv.push_back({ 0.0, 1.0 });	// Position 3
+				m.uv.push_back({ 1.0f, 1.0f }); // Position 4
+			}
+			
+			break;
+		}
+
+		}
+
+
+
+
+		
+
+		// South
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+
+		// East
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+
+		// North
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
+
+		// West
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.25 }); m.col.push_back(olc::WHITE);
+
+		// Top
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.0 }); m.col.push_back(olc::WHITE);
+
+		// Bottom
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.75 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
+		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+
+
+		/*
+		* // Right
+		1, 2, 6,
+		6, 5, 1,
+		// Left
+		0, 4, 7,
+		7, 3, 0,
+		// Top
+		4, 5, 6,
+		6, 7, 4,
+		// Bottom
+		0, 3, 2,
+		2, 1, 0,
+		// Back
+		0, 1, 5,
+		5, 4, 0,
+		// Front
+		3, 7, 6,
+		6, 2, 3
+		*/
+
+
+		return m;
+	}
+
 
 	std::optional<olc::utils::hw3d::mesh> LoadObj(const std::string& path)
 	{
