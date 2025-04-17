@@ -769,14 +769,14 @@ namespace olc::utils::hw3d
 	{
 		olc::utils::hw3d::mesh m;
 
-
-		/*			 5		   6
-				1        2
-
-					 4		   7
-				0		 3
-
-		*/
+		//   Coordinates
+		//        5--------6
+		//       /|       /|
+		//      1--------2 |
+		//      | |      | |
+		//      | 4------|-7
+		//      |/       |/
+		//      0--------3
 
 		std::vector<olc::vf3d> verts;
 		verts.push_back(olc::vf3d(0, 0, 0) + vOffset);
@@ -1186,30 +1186,23 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
-	olc::utils::hw3d::mesh CreateSkyCube(std::string strTextureImage, SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_MAP)
-	{
-		olc::Renderable* renTexture;
-		renTexture->Load(strTextureImage);
-		CreateSkyCube(renTexture, SkyCubeTextureType);
-	}
-
 	/*
 	* Creates a SkyCube
 	* renTexture: olc::Renderable
 	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_MAP, RIGHT_CROSS_TEXTURE_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
 	*/
-	olc::utils::hw3d::mesh CreateSkyCube(olc::Renderable* renTexture, SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
+	olc::utils::hw3d::mesh CreateSkyCube(SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
 	{
 		olc::utils::hw3d::mesh m;
 
 		//   Coordinates
-		//        7--------6
+		//        5--------6
 		//       /|       /|
-		//      4--------5 |
+		//      1--------2 |
 		//      | |      | |
-		//      | 3------|-2
+		//      | 4------|-7
 		//      |/       |/
-		//      0--------1
+		//      0--------3
 
 
 		auto meshPushBack = [&](vf3d pos, olc::Pixel col = olc::WHITE)
@@ -1228,6 +1221,17 @@ namespace olc::utils::hw3d
 
 		case SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP:
 		{
+			/*
+			* Notes for a Cube Map we just use Javidx9 implementation as is it simply brilliant!
+			*
+			*  __________
+			* |   **     |
+			* | ******** |
+			* |   **     |
+			* |       ~~ |
+			*  ----------
+			*/
+
 			m = CreateSanityCube();
 			return m;
 			break;
@@ -1295,10 +1299,21 @@ namespace olc::utils::hw3d
 
 			break;
 		}
-
 		case SKYCUBE_TEXTURE_TYPE::VERT_TEXTURE_MAP:
 		{
-			// For a vertical texture, x remains the same, y increase
+			/*
+			* Note: for a vertical texture, x remains the same, y increase
+			*
+			*  __
+			* |**|
+			* |**|
+			* |**|
+			* |**|
+			* |**|
+			* |**|
+			*  --
+			*/
+
 			float y = 1 / 6;
 			for (int8_t i = 0; i < 5; i++)
 			{
@@ -1315,7 +1330,15 @@ namespace olc::utils::hw3d
 		}
 		case SKYCUBE_TEXTURE_TYPE::HORZ_TEXTURE_MAP:
 		{
-			// For a horz texture, y remains the same, x increase
+
+			/*
+			* Note: for a horz texture, y remains the same, x increase
+			*
+			*  __________________
+			* | **|**|**|**|**|**|
+			*  ------------------
+			*/
+
 			float x = 1 / 6;
 			for (int8_t i = 0; i < 5; i++)
 			{
@@ -1351,57 +1374,53 @@ namespace olc::utils::hw3d
 		}
 
 
-
-
-		
-
 		// South
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 0, -1, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 0,0,0 });
+		meshPushBack({ 1,0,0 });
+		meshPushBack({ 1,1,0 });
+		meshPushBack({ 0,0,0 });
+		meshPushBack({ 1,1,0 });
+		meshPushBack({ 0,1,0 });
 
 		// East
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 1, 0, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 1,0,0 });
+		meshPushBack({ 1,0,1 });
+		meshPushBack({ 1,1,1 });
+		meshPushBack({ 1,0,0 });
+		meshPushBack({ 1,1,1 });
+		meshPushBack({ 1,1,0 });
 
 		// North
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 1.0, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 0, 1, 0 }); m.uv.push_back({ 0.75, 0.25 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 1,0,1 }); 
+		meshPushBack({ 0,0,1 }); 
+		meshPushBack({ 0,1,1 }); 
+		meshPushBack({ 1,0,1 }); 
+		meshPushBack({ 0,1,1 }); 
+		meshPushBack({ 1,1,1 }); 
 
 		// West
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ -1, 0, 0, 0 }); m.uv.push_back({ 0.0, 0.25 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 0,0,1 }); 
+		meshPushBack({ 0,0,0 }); 
+		meshPushBack({ 0,1,0 }); 
+		meshPushBack({ 0,0,1 }); 
+		meshPushBack({ 0,1,0 }); 
+		meshPushBack({ 0,1,1 }); 
 
 		// Top
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,0 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.25 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.5, 0.0 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,1,1 }); m.norm.push_back({ 0, 1, 0, 0 }); m.uv.push_back({ 0.25, 0.0 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 0,1,0 }); 
+		meshPushBack({ 1,1,0 }); 
+		meshPushBack({ 1,1,1 }); 
+		meshPushBack({ 0,1,0 }); 
+		meshPushBack({ 1,1,1 }); 
+		meshPushBack({ 0,1,1 }); 
 
 		// Bottom
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,1 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.75 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 1,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.5, 0.5 }); m.col.push_back(olc::WHITE);
-		m.pos.push_back({ 0,0,0 }); m.norm.push_back({ 0, -1, 0, 0 }); m.uv.push_back({ 0.25, 0.5 }); m.col.push_back(olc::WHITE);
+		meshPushBack({ 0,0,1 }); 
+		meshPushBack({ 1,0,1 }); 
+		meshPushBack({ 1,0,0 }); 
+		meshPushBack({ 0,0,1 }); 
+		meshPushBack({ 1,0,0 }); 
+		meshPushBack({ 0,0,0 }); 
 
 
 		/*
