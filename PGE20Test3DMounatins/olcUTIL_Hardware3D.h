@@ -1119,8 +1119,8 @@ namespace olc::utils::hw3d
 		}
 
 		// As the engine currently does not support indices we need to calculate the trianges (faces)
-		// To do this we will work out the indices, then push back the indice mTemp vector into our output mesh vectors
-		// Hence in the end we will have all the face locations in blocks of 3 in mTemp output
+		// To do this we will work out the indices, then push back the indice mTemp vector into our output mesh (m) vectors
+		// Hence in the end we will have all the face locations in blocks of 3 in output mesh (m)
 
 		// This code is modified version from the Microsoft DirectX tutorial 
 		// https://github.com/microsoft/DirectXTK/wiki
@@ -1219,7 +1219,6 @@ namespace olc::utils::hw3d
 
 	/*
 	* Creates a SkyCube
-	* renTexture: olc::Renderable
 	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_CUBE_MAP, LEFT_CROSS_TEXTURE_RECT_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
 	*/
 	olc::utils::hw3d::mesh CreateSkyCube(SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
@@ -1457,6 +1456,97 @@ namespace olc::utils::hw3d
 		return m;
 	}
 
+
+	/*
+	* Creates the HW3D Skycube mesh to be used with HW3D_DrawSkyCube method
+	* NOTE: This mesh has no texture coordinates, as HW3D_DrawSkyCube draws the mesh using the GPUSkyCubeTask
+	* The GPUSkyCubeTask requires use to provide the 6 sides of the cube in the olc::SkyCubeProperties
+	* The mesh coordinates are in Left Hand ONLY. (OpenGL GL_TEXTURE_CUBE_MAP (SkyCubes) are always Left Hand)
+	* The GPUSkyCubeTask will take care of the rest
+	*/
+	olc::utils::hw3d::mesh CreateHW3DSkyCube()
+	{
+		olc::utils::hw3d::mesh m;
+		olc::utils::hw3d::mesh mTemp; // Temp mesh use to calcuate the points, texture and colours
+
+
+		// Some Autos to help keep our code managable
+
+		// Pushs back pos to m mesh and auto calcuates the norms
+		auto meshPushBack = [&](vf3d pos, olc::Pixel col = olc::WHITE)
+			{
+				vf3d vf3dNorm = pos.norm();
+				m.pos.push_back({ pos.x, pos.y, pos.z });						// COORDINATES
+				m.norm.push_back({ vf3dNorm.x, vf3dNorm.y, vf3dNorm.z, 0 });	// NORMS
+				m.uv.push_back({ 0.0f, 0.0f });									// TexCoord
+				m.col.push_back(col);											// COLOURS
+			};
+
+		// uses the pass face triangle points to create our output mesh
+		auto createOutPutMesh = [&](std::vector<int> vecPosition)
+			{
+				for (auto p : vecPosition)
+				{
+					meshPushBack({ mTemp.pos[p][0], mTemp.pos[p][1], mTemp.pos[p][2] });
+				}
+
+			};
+
+
+		//   Coordinates
+		//        7--------6
+		//       /|       /|
+		//      4--------5 |
+		//      | |      | |
+		//      | 3------|-2
+		//      |/       |/
+		//      0--------1
+		//
+		
+
+		// Set up our temp mesh
+		mTemp.pos.push_back({ -1.0f, -1.0f, 1.0f });	// Position 0
+		mTemp.pos.push_back({ 1.0f, -1.0f, 1.0f });		// Position 1
+		mTemp.pos.push_back({ 1.0f, -1.0f, -1.0f });	// Position 2
+		mTemp.pos.push_back({ -1.0f, -1.0f, -1.0f });	// Position 3
+		mTemp.pos.push_back({ -1.0f, 1.0f, 1.0f });		// Position 4
+		mTemp.pos.push_back({ 1.0f, 1.0f, 1.0f });		// Position 5
+		mTemp.pos.push_back({ 1.0f, 1.0f, -1.0f });		// Position 6
+		mTemp.pos.push_back({ -1.0f, 1.0f, -1.0f });	// Position 7
+
+		// As the engine currently does not support indices we need to calculate the trianges (faces)
+		// To do this we will manaully set the triangles as per the indices map, 
+		// then push back the index mTemp vector into our output mesh (m) vectors
+		// Hence in the end we will have all the face locations in blocks of 3 in output mesh (m)
+
+
+		// ORDER IS IMPORTANT
+
+		// Right face
+		createOutPutMesh({ 1, 2, 6, 6, 5, 1 });
+
+		// Left Face
+		createOutPutMesh({ 0, 4, 7, 7, 3, 0 });
+
+		// Top Face
+		createOutPutMesh({ 4, 5, 6, 6, 7, 4 });
+
+		// Buttom Face
+		createOutPutMesh({ 0, 3, 2, 2, 1, 0 });
+
+		// Back Face
+		createOutPutMesh({ 0, 1, 5, 5, 4, 0 });
+
+		// Front Face
+		createOutPutMesh({ 3, 7, 6, 6, 2, 3 });
+
+		// finally some clean up
+		mTemp.pos.clear();
+
+
+		return m;
+
+	}
 
 	std::optional<olc::utils::hw3d::mesh> LoadObj(const std::string& path)
 	{
