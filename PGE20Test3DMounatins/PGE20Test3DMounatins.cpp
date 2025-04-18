@@ -36,10 +36,10 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 5.0f, 5.0f, 20.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { 5.0f, 5.0f, 40.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 5.0f, 5.0f, 20.0f };       // vf3d Offset
+    olc::vf3d vf3dOffset = { 5.0f, 5.0f, 40.0f };       // vf3d Offset
     olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
 
     olc::vf3d vf3dSanityCubeScale = { 2.0f, 2.0f, 2.0f };        // vf3d SanityCube Scale (in sort its Size)
@@ -51,13 +51,13 @@ public:
     olc::vf3d vf3dSkyCubeOffset = { -200.0f, -300.0f, -200.0f }; // vf3d SkyCube Offset
 
     olc::vf3d vf3dPyramidScale = { 30.0f, 50.0f, 30.0f };   // vf3d Pyramid Scale (in sort its Size)
-    olc::vf3d vf3dPyramidLocation = { 2.5f, 2.5f, 2.5f };   // vf3d Pyramid Location 
+    olc::vf3d vf3dPyramidLocation = { 0.0f, 0.5f, 11.0f };   // vf3d Pyramid Location 
     olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Pyramid Offset
 
 
     olc::vf3d vf3dSphereScale = { 10.0f, 10.0f, 10.0f };   // vf3d Sphere Scale (in sort its Size)
-    olc::vf3d vf3dSphereLocation = { 5.0f, 5.0f, 5.0f };   // vf3d Sphere Location 
-    olc::vf3d vf3dSphereOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Sphere Offset
+    olc::vf3d vf3dSphereLocation = { 0.0f, 0.0f, 5.0f };   // vf3d Sphere Location 
+    olc::vf3d vf3dSphereOffset = { 0.0f, 0.0f, 0.0f };    // vf3d Sphere Offset
 
 
     float fYaw = 0.0f;		    // FPS Camera rotation in X plane
