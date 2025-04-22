@@ -164,7 +164,7 @@ public:
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
         mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
         matSphere = olc::utils::hw3d::CreateSphere();
-        matSkyCube = olc::utils::hw3d::CreateSkyCube(olc::utils::hw3d::LEFT_CROSS_TEXTURE_RECT_MAP);
+        matSkyCube = olc::utils::hw3d::CreateCube(olc::utils::hw3d::LEFT_CROSS_TEXTURE_RECT_MAP);
         //matSkyCube = olc::utils::hw3d::CreateHW3DSkyCube();
 
         renTestCube.Load("assets/images/sanity_cube.png");

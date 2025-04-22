@@ -1208,6 +1208,11 @@ namespace olc
 			} };
 		olc::CullMode cull = olc::CullMode::NONE;
 		olc::Pixel tint = olc::WHITE;
+
+		// John Galvin
+		uint32_t haslightsource = 0;								// Has a light source true/false 0/1
+		std::array<float, 3> lightposition = { 0.0f, 0.0f, 0.0f };	// Light Position x, y, z
+
 	};
 
 	struct LayerDesc
@@ -1525,6 +1530,16 @@ namespace olc
 		// 3D Rendering cull faces depending on winding order
 		void HW3D_SetCullMode(const olc::CullMode mode);
 
+		// Draws a 3D Mesh structure (as defined by olc::DecalStructure) with a light source
+		void HW3D_DrawObject(
+			const std::array<float, 16>& matModelView,
+			olc::Decal* decal,
+			const olc::DecalStructure layout,
+			const std::vector<std::array<float, 4>>& pos,
+			const std::vector<std::array<float, 2>>& uv,
+			const std::vector<olc::Pixel>& col,
+			const olc::Pixel tint = olc::WHITE);
+
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure)
 		void HW3D_DrawObject(
 			const std::array<float, 16>& matModelView,
@@ -1533,6 +1548,7 @@ namespace olc
 			const std::vector<std::array<float, 4>>& pos,
 			const std::vector<std::array<float, 2>>& uv,
 			const std::vector<olc::Pixel>& col,
+			const std::array<float, 3> &lightPosition,
 			const olc::Pixel tint = olc::WHITE);
 
 		// Draws a 3D line from pos1 to pos2
@@ -3542,6 +3558,26 @@ namespace olc
 		task.cull = nHW3DCullMode;
 		task.mvp = matModelView;
 		task.tint = tint;
+		task.vb.resize(pos.size());
+
+		for (size_t i = 0; i < pos.size(); i++)
+			task.vb[i] = { pos[i][0], pos[i][1], pos[i][2], 1.0f, uv[i][0], uv[i][1], col[i].n };
+
+		vLayers[nTargetLayer].vecGPUTasks.push_back(task);
+	}
+
+	void olc::PixelGameEngine::HW3D_DrawObject(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const std::array<float, 3>& lightPosition, const olc::Pixel tint)
+	{
+		GPUTask task;
+		task.decal = decal;
+		task.mode = nDecalMode;
+		task.structure = layout;
+		task.depth = bHW3DDepthTest;
+		task.cull = nHW3DCullMode;
+		task.mvp = matModelView;
+		task.tint = tint;
+		task.haslightsource = 1;
+		task.lightposition = lightPosition;
 		task.vb.resize(pos.size());
 
 		for (size_t i = 0; i < pos.size(); i++)

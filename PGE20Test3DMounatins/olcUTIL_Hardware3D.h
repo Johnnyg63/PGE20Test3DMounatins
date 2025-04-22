@@ -721,7 +721,7 @@ namespace olc::utils::hw3d
 	/*
 	* Texture type for SkyCub only
 	*/
-	enum SKYCUBE_TEXTURE_TYPE {
+	enum CUBE_TEXTURE_TYPE {
 
 		TEXTURE = 0,
 		LEFT_CROSS_TEXTURE_CUBE_MAP,
@@ -1379,7 +1379,8 @@ namespace olc::utils::hw3d
 				nextY = y + 1;
 				nextX = (x + 1) % stride;
 
-				pos0 = y * stride + x;			// point = y * width + x
+				// point = y * stride + x
+				pos0 = y * stride + x;			
 				pos1 = nextY * stride + x;
 				pos2 = y * stride + nextX;
 				pos3 = nextY * stride + nextX;
@@ -1449,10 +1450,10 @@ namespace olc::utils::hw3d
 	}
 
 	/*
-	* Creates a SkyCube
-	* SKYCUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_CUBE_MAP, LEFT_CROSS_TEXTURE_RECT_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
+	* Creates a Cube and sets the texcoord depending on the texture map image
+	* CUBE_TEXTURE_TYPE : SOLID_TEXTURE, LEFT_CROSS_TEXTURE_CUBE_MAP, LEFT_CROSS_TEXTURE_RECT_MAP, VERT_TEXTURE_MAP, HORZ_TEXTURE_MAP
 	*/
-	olc::utils::hw3d::mesh CreateSkyCube(SKYCUBE_TEXTURE_TYPE SkyCubeTextureType = SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
+	olc::utils::hw3d::mesh CreateCube(CUBE_TEXTURE_TYPE CubeTextureType = CUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP)
 	{
 		olc::utils::hw3d::mesh m;
 
@@ -1477,10 +1478,10 @@ namespace olc::utils::hw3d
 
 		// 1: Lets see what we are dealing with
 
-		switch (SkyCubeTextureType)
+		switch (CubeTextureType)
 		{
 
-		case SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP:
+		case CUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_CUBE_MAP:
 		{
 			/*
 			* Notes for a Cube Map we just use Javidx9 implementation as is it simply brilliant!
@@ -1498,7 +1499,7 @@ namespace olc::utils::hw3d
 			break;
 		}
 
-		case SKYCUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_RECT_MAP:
+		case CUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_RECT_MAP:
 		{
 			/*
 			* Notes for a Rect Map the x value never changes, just the y
@@ -1560,7 +1561,7 @@ namespace olc::utils::hw3d
 
 			break;
 		}
-		case SKYCUBE_TEXTURE_TYPE::VERT_TEXTURE_MAP:
+		case CUBE_TEXTURE_TYPE::VERT_TEXTURE_MAP:
 		{
 			/*
 			* Note: for a vertical texture, x remains the same, y increase
@@ -1589,7 +1590,7 @@ namespace olc::utils::hw3d
 			}
 			break;
 		}
-		case SKYCUBE_TEXTURE_TYPE::HORZ_TEXTURE_MAP:
+		case CUBE_TEXTURE_TYPE::HORZ_TEXTURE_MAP:
 		{
 
 			/*
@@ -1615,11 +1616,11 @@ namespace olc::utils::hw3d
 			}
 			break;
 		}
-		case SKYCUBE_TEXTURE_TYPE::TEXTURE:
+		case CUBE_TEXTURE_TYPE::TEXTURE:
 		default:
 		{
 			// For a solid texture, South, East, North, West, Top and Bottom all have the same Text Coords
-			for (int8_t i = 0; i < 5; i++)
+			for (int8_t i = 0; i < 6; i++)
 			{
 				m.uv.push_back({ 0.0f, 0.0f }); // Position 1
 				m.uv.push_back({ 1.0f, 0.0 });	// Position 2
