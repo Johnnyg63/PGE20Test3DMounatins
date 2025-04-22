@@ -94,7 +94,7 @@ public:
     /* End Reneders */
 
     /* SkyCube Stuff*/
-    olc::SkyCubeProperties sSkyCubeProps;
+    //olc::SkyCubeProperties sSkyCubeProps;
     /* End SkyCube Stuff*/
 
 
@@ -143,7 +143,7 @@ public:
         matWorld.identity();
         matView.identity();
 
-        Cam3D.SetAspectRatio(fAspect);
+        Cam3D.SetScreenSize(GetScreenSize()); // SetAspectRatio(fAspect);
         Cam3D.SetClippingPlanes(n, f);
         Cam3D.SetFieldOfView(S);
 
@@ -193,12 +193,12 @@ public:
 
         // SkyCube
         // TODO: Need to move this to a new area....
-        sSkyCubeProps.renRight.Load("assets/images/skybox/right.jpg");
-        sSkyCubeProps.renLeft.Load("assets/images/skybox/left.jpg");
-        sSkyCubeProps.renTop.Load("assets/images/skybox/top.jpg");
-        sSkyCubeProps.renBottom.Load("assets/images/skybox/bottom.jpg");
-        sSkyCubeProps.renFront.Load("assets/images/skybox/front.jpg");
-        sSkyCubeProps.renBack.Load("assets/images/skybox/back.jpg");
+        /*sSkyCubeProps.sprBack = new olc::Sprite("assets/images/skybox/right.jpg");
+        sSkyCubeProps.sprLeft = new olc::Sprite("assets/images/skybox/left.jpg");
+        sSkyCubeProps.sprTop = new olc::Sprite("assets/images/skybox/top.jpg");
+        sSkyCubeProps.sprBottom = new olc::Sprite("assets/images/skybox/bottom.jpg");
+        sSkyCubeProps.sprFront = new olc::Sprite("assets/images/skybox/front.jpg");
+        sSkyCubeProps.sprBack = new olc::Sprite("assets/images/skybox/back.jpg");*/
 
 
 
@@ -366,18 +366,15 @@ public:
             // Looking Up
             if ((float)GetMousePos().y < (((float)centreScreenPos.y / 100) * 70))
             {
-                fYaw += fYawRoC * fElapsedTime;
-                if (fYaw > 1.0f) fYaw = 1.0f;
-
-
+                fYaw -= fYawRoC * fElapsedTime;
+                if (fYaw < -1.0f) fYaw = -1.0f;
             }
 
             // Looking Down
             if ((float)GetMousePos().y > (((float)centreScreenPos.y / 100) * 130))
             {
-                fYaw -= fYawRoC * fElapsedTime;
-                if (fYaw < -1.0f) fYaw = -1.0f;
-
+                fYaw += fYawRoC * fElapsedTime;
+                if (fYaw > 1.0f) fYaw = 1.0f;
             }
 
         }
@@ -405,30 +402,28 @@ public:
         // Moving Forward
         if (GetKey(olc::Key::UP).bHeld || GetMouse(1).bHeld)
         {
-            //vf3dCamera.z += 8.0f * fElapsedTime;
-            vf3dCamera -= vf3dForward;
+            vf3dCamera += vf3dForward;
         }
 
         // Moving Backward
         if (GetKey(olc::Key::DOWN).bHeld)
         {
-            //vf3dCamera.z -= 8.0f * fElapsedTime;
-            vf3dCamera += vf3dForward;
+            vf3dCamera -= vf3dForward;
         }
 
         // Moving Left (Strife)
         if (GetKey(olc::Key::LEFT).bHeld)
         {
-            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
         }
 
 
         // Moving Right (Strife)
         if (GetKey(olc::Key::RIGHT).bHeld)
         {
-            vf3dCamera.x -= cos(fTheta) * fStrifeRoC * fElapsedTime;
-            vf3dCamera.z -= sin(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.x += cos(fTheta) * fStrifeRoC * fElapsedTime;
+            vf3dCamera.z += sin(fTheta) * fStrifeRoC * fElapsedTime;
 
         }
 
