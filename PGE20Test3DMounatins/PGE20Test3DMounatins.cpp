@@ -273,7 +273,7 @@ public:
         //HW3D_Projection(matProject.m);
 
         // Lighting
-        olc::vf3d vLight = vf3dSunLocation.norm();
+       /* olc::vf3d vLight = vf3dSunLocation.norm();
         olc::Pixel pixIllum;
         for (size_t i = 0; i < meshMountain.pos.size(); i += 3)
         {
@@ -288,7 +288,7 @@ public:
             meshMountain.col[i + 0] = pixIllum;
             meshMountain.col[i + 1] = pixIllum;
             meshMountain.col[i + 2] = pixIllum;
-        }
+        }*/
 
 
         //HW3D_DrawSkyCube(mSkyCube.m, &sSkyCubeProps, matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
@@ -300,13 +300,14 @@ public:
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col);
+        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col);
+        HW3D_DrawObject_WithLighting((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col, 
+            olc::WHITE, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
 
         //HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 

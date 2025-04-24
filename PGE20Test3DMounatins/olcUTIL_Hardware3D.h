@@ -1498,7 +1498,6 @@ namespace olc::utils::hw3d
 			return m;
 			break;
 		}
-
 		case CUBE_TEXTURE_TYPE::LEFT_CROSS_TEXTURE_RECT_MAP:
 		{
 			/*

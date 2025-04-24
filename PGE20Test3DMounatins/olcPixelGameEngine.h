@@ -1212,6 +1212,7 @@ namespace olc
 		// John Galvin
 		uint32_t haslightsource = 0;								// Has a light source true/false 0/1
 		std::array<float, 3> lightposition = { 0.0f, 0.0f, 0.0f };	// Light Position x, y, z
+		olc::Pixel lightColour = olc::BLANK;
 
 	};
 
@@ -1531,14 +1532,16 @@ namespace olc
 		void HW3D_SetCullMode(const olc::CullMode mode);
 
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure) with a light source
-		void HW3D_DrawObject(
+		void HW3D_DrawObject_WithLighting(
 			const std::array<float, 16>& matModelView,
 			olc::Decal* decal,
 			const olc::DecalStructure layout,
 			const std::vector<std::array<float, 4>>& pos,
 			const std::vector<std::array<float, 2>>& uv,
 			const std::vector<olc::Pixel>& col,
-			const olc::Pixel tint = olc::WHITE);
+			const olc::Pixel tint,
+			const std::array<float, 3>& lightPosition,
+			const olc::Pixel lightColour);
 
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure)
 		void HW3D_DrawObject(
@@ -1548,8 +1551,8 @@ namespace olc
 			const std::vector<std::array<float, 4>>& pos,
 			const std::vector<std::array<float, 2>>& uv,
 			const std::vector<olc::Pixel>& col,
-			const std::array<float, 3> &lightPosition,
-			const olc::Pixel tint = olc::WHITE);
+			const olc::Pixel tint = olc::WHITE
+			);
 
 		// Draws a 3D line from pos1 to pos2
 		void HW3D_DrawLine(
@@ -3566,7 +3569,7 @@ namespace olc
 		vLayers[nTargetLayer].vecGPUTasks.push_back(task);
 	}
 
-	void olc::PixelGameEngine::HW3D_DrawObject(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const std::array<float, 3>& lightPosition, const olc::Pixel tint)
+	void olc::PixelGameEngine::HW3D_DrawObject_WithLighting(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const olc::Pixel tint, const std::array<float, 3>& lightPosition, const olc::Pixel lightColour)
 	{
 		GPUTask task;
 		task.decal = decal;
