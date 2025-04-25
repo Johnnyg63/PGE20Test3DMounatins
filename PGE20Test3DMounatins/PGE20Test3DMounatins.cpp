@@ -300,7 +300,8 @@ public:
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
+        HW3D_DrawObject_WithLighting((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col,
+            olc::WHITE, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 

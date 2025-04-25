@@ -1251,6 +1251,14 @@ namespace olc
 		virtual void       ApplyTexture(uint32_t id) = 0;
 		virtual void       UpdateViewport(const olc::vi2d& pos, const olc::vi2d& size) = 0;
 		virtual void       ClearBuffer(olc::Pixel p, bool bDepth) = 0;
+
+		/*
+		* Loads a shader program file and returns the contents
+		* Requires full file path
+		* John Galvin: 
+		*/
+		virtual std::string	LoadShaderProgram(std::string fullFilePath) = 0;
+
 		static olc::PixelGameEngine* ptrPGE;
 	};
 
@@ -5276,6 +5284,14 @@ namespace olc
 			return olc::rcode::OK;
 		}
 
+		std::string LoadShaderProgram(const char* fullFilePath)
+		{
+			return std::string();
+		}
+		{
+
+		}
+
 		olc::rcode DestroyDevice() override
 		{
 #if defined(OLC_PLATFORM_WINAPI)
@@ -5917,7 +5933,11 @@ namespace olc
 
 			// Load & Compile Quad Shader - assumes no errors
 			m_nFS = locCreateShader(0x8B30);
-			const GLchar* strFS =
+			//const GLchar* strFS = LoadShaderProgram("pge.frag");
+			std::string fragShader = LoadShaderProgram("pge.frag");
+			const GLchar* strFS = fragShader.c_str();
+
+			/*const GLchar* strFS =
 #if defined(__arm__) || defined(OLC_PLATFORM_EMSCRIPTEN)
 				"#version 300 es\n"
 				"precision mediump float;"
@@ -5928,27 +5948,35 @@ namespace olc
 				"in vec2 oTex;\n"
 				"in vec4 oCol;\n"
 				"uniform sampler2D sprTex;\n"
-				"void main(){pixel = texture(sprTex, oTex) * oCol;}";
+				"void main(){pixel = texture(sprTex, oTex) * oCol;}";*/
+
 			locShaderSource(m_nFS, 1, &strFS, NULL);
 			locCompileShader(m_nFS);
 
 			m_nVS = locCreateShader(0x8B31);
-			const GLchar* strVS =
-#if defined(__arm__) || defined(OLC_PLATFORM_EMSCRIPTEN)
-				"#version 300 es\n"
-				"precision mediump float;"
-#else
-				"#version 330 core\n"
-#endif
-				"layout(location = 0) in vec4 aPos;\n"
-				"layout(location = 1) in vec2 aTex;\n"
-				"layout(location = 2) in vec4 aCol;\n"
-				"uniform mat4 mvp;\n"
-				"uniform int is3d;\n"
-				"uniform vec4 tint;\n"
-				"out vec2 oTex;\n"
-				"out vec4 oCol;\n"
-				"void main(){ if(is3d!=0) {gl_Position = mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0); oTex = aTex;} else {float p = 1.0 / aPos.z; gl_Position = p * vec4(aPos.x, aPos.y, 0.0, 1.0); oTex = p * aTex;} oCol = aCol * tint;}";
+			//const GLchar* strVS = LoadShaderProgram("pge.vert").c_str();
+			
+			std::string vertShader = LoadShaderProgram("pge.vert");
+			const GLchar* strVS = vertShader.c_str();
+			
+//			const GLchar* strVS =
+//#if defined(__arm__) || defined(OLC_PLATFORM_EMSCRIPTEN)
+//				"#version 300 es\n"
+//				"precision mediump float;"
+//#else
+//				"#version 330 core\n"
+//#endif
+//				"layout(location = 0) in vec4 aPos;\n"
+//				"layout(location = 1) in vec2 aTex;\n"
+//				"layout(location = 2) in vec4 aCol;\n"
+//				"uniform mat4 mvp;\n"
+//				"uniform int is3d;\n"
+//				"uniform vec4 tint;\n"
+//				"out vec2 oTex;\n"
+//				"out vec4 oCol;\n"
+//				"void main(){ if(is3d!=0) {gl_Position = mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0); oTex = aTex;} else {float p = 1.0 / aPos.z; gl_Position = p * vec4(aPos.x, aPos.y, 0.0, 1.0); oTex = p * aTex;} oCol = aCol * tint;}";
+//			
+
 			locShaderSource(m_nVS, 1, &strVS, NULL);
 			locCompileShader(m_nVS);
 
@@ -5985,6 +6013,28 @@ namespace olc
 			rendBlankQuad.Decal()->Update();
 			return olc::rcode::OK;
 		}
+
+		// John Galvin
+
+		std::string LoadShaderProgram(std::string fullFilePath) override
+		{
+			std::ifstream in(fullFilePath, std::ios::binary);
+			if (in)
+			{
+				std::string contents;
+				in.seekg(0, std::ios::end);
+				contents.resize(in.tellg());
+				in.seekg(0, std::ios::beg);
+				in.read(&contents[0], contents.size());
+				in.close();
+				return(contents);
+			}
+			return("");
+		}
+
+
+
+		// END John Galvin
 
 		olc::rcode DestroyDevice() override
 		{
