@@ -3,4 +3,25 @@ out vec4 pixel;
 in vec2 oTex;
 in vec4 oCol;
 uniform sampler2D sprTex;
-void main(){pixel = texture(sprTex, oTex) * oCol;}
+uniform int lightmode;
+
+
+void main()
+{
+
+    switch (lightmode) 
+    {
+        case 1: // directLight
+            pixel = texture(sprTex, oTex) * oCol; // direcLight();
+            break;
+        case 2: // tba
+            
+            break;
+        case 0: // no light
+        default:
+            pixel = texture(sprTex, oTex) * oCol;
+            break;
+    }
+
+	
+}

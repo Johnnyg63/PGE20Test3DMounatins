@@ -5783,6 +5783,13 @@ namespace olc
 		uint32_t m_uniIs3D = 0;
 		uint32_t m_uniTint = 0;
 
+		// John Galvin
+
+		uint32_t m_uniLightMode = 0;	// Used to select which lighting mode, directLight, pointLight, spotLight, noLight (default)
+
+
+		// End John Galvin
+
 		struct locVertex
 		{
 			float pos[4];
@@ -5988,7 +5995,13 @@ namespace olc
 			m_uniMVP = locGetUniformLocation(m_nQuadShader, "mvp");
 			m_uniIs3D = locGetUniformLocation(m_nQuadShader, "is3d");
 			m_uniTint = locGetUniformLocation(m_nQuadShader, "tint");
+
+			// John Galvin
+			m_uniLightMode = locGetUniformLocation(m_nQuadShader, "lightmode");
+
 			locUniform1i(m_uniIs3D, 0);
+			locUniform1i(m_uniLightMode, 0);	// John Galvin
+
 			locUniformMatrix4fv(m_uniMVP, 16, false, matProjection.data());
 			float f[4] = { 100.0f, 100.0f, 100.0f, 100.0f };
 			locUniform4fv(m_uniTint, 4, f);
@@ -6100,6 +6113,7 @@ namespace olc
 #endif
 
 			locUniform1i(m_uniIs3D, 0);
+			locUniform1i(m_uniLightMode, 0); // John Galvin
 			locUniformMatrix4fv(m_uniMVP, 1, false, matProjection.data());
 			glDisable(GL_CULL_FACE);
 			glDepthFunc(GL_LESS);
@@ -6137,6 +6151,7 @@ namespace olc
 			locBufferData(0x8892, sizeof(locVertex) * 4, verts, 0x88E0);
 
 			locUniform1i(m_uniIs3D, 0);
+			locUniform1i(m_uniLightMode, 0); // John Galvin
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -6158,6 +6173,7 @@ namespace olc
 
 			locBufferData(0x8892, sizeof(locVertex) * decal.points, pVertexMem, 0x88E0);
 			locUniform1i(m_uniIs3D, 0);
+			locUniform1i(m_uniLightMode, 0); // John Galvin
 
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
@@ -6269,6 +6285,8 @@ namespace olc
 
 			// Use 3D Shader
 			locUniform1i(m_uniIs3D, 1);
+
+			locUniform1i(m_uniLightMode, 1); // John Galvin
 
 			// Use MVP Matrix - yeah, but this needs to happen somewhere
 			// and at least its per object which makes sense

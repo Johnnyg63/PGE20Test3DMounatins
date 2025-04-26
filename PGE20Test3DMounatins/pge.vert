@@ -7,12 +7,18 @@ uniform mat4 mvp;		// Mat View Projection
 uniform int is3d;		// Is it a 2D or 3D
 uniform vec4 tint;		// Tint colour to be applied	{ R, G, B, A}
 out vec2 oTex;			// Output text coords
-out vec4 oCol;			// Outout oCol
+out vec4 oCol;			// Output Colours
+
+
+out vec3 crntPos;		// Outputs the current position for the Fragment Shader
 
 void main()
 {
 	if(is3d!=0) 
 	{
+		// calculates current position // used in lighting and shadows
+		crntPos = vec3(mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0f));
+
 		gl_Position = mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0); 
 		oTex = aTex;
 	} 
