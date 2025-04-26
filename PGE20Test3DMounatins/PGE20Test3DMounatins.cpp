@@ -300,15 +300,19 @@ public:
 
         HW3D_DrawLineBox((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f }, olc::YELLOW);
 
-        HW3D_DrawObject_WithLighting((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col,
-            olc::WHITE, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
+        olc::GPUTask_EXT ext;
+        ext.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
+        ext.enableLight = true;
+        ext.lightColour == olc::YELLOW;
+        ext.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
+
+        HW3D_DrawObject_extension((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, olc::WHITE, ext);
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject_WithLighting((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col, 
-            olc::WHITE, { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z }, olc::WHITE);
+        HW3D_DrawObject_extension((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col, olc::WHITE, ext);
 
         //HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
 

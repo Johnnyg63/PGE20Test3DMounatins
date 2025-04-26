@@ -1191,6 +1191,18 @@ namespace olc
 		CCW = 2
 	};
 
+	// John Galvin
+
+	struct GPUTask_EXT
+	{
+		bool enableLight = false;									// Enable/Disable light, Default: false
+		std::array<float, 3> cameraPosition = { 0.0f, 0.0f, 0.0f };	// Camera Position x, y, z , Default: { 0.0f, 0.0f, 0.0f }
+		std::array<float, 3> lightPosition = { 0.0f, 0.0f, 0.0f };	// Light Position x, y, z , Default: { 0.0f, 0.0f, 0.0f }
+		olc::Pixel lightColour = olc::WHITE;						// Light Colour, Default: olc::WHITE
+
+		bool enableShadow = false;
+	};
+
 	struct GPUTask
 	{
 		//   x      y      z      w      u      v       rgb
@@ -1210,11 +1222,11 @@ namespace olc
 		olc::Pixel tint = olc::WHITE;
 
 		// John Galvin
-		uint32_t haslightsource = 0;								// Has a light source true/false 0/1
-		std::array<float, 3> lightposition = { 0.0f, 0.0f, 0.0f };	// Light Position x, y, z
-		olc::Pixel lightColour = olc::BLANK;
+		GPUTask_EXT* pGPUTaslExt = nullptr;
 
 	};
+
+
 
 	struct LayerDesc
 	{
@@ -1540,7 +1552,7 @@ namespace olc
 		void HW3D_SetCullMode(const olc::CullMode mode);
 
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure) with a light source
-		void HW3D_DrawObject_WithLighting(
+		void HW3D_DrawObject_extension(
 			const std::array<float, 16>& matModelView,
 			olc::Decal* decal,
 			const olc::DecalStructure layout,
@@ -1548,8 +1560,7 @@ namespace olc
 			const std::vector<std::array<float, 2>>& uv,
 			const std::vector<olc::Pixel>& col,
 			const olc::Pixel tint,
-			const std::array<float, 3>& lightPosition,
-			const olc::Pixel lightColour);
+			olc::GPUTask_EXT pGPUTask_Ext);
 
 		// Draws a 3D Mesh structure (as defined by olc::DecalStructure)
 		void HW3D_DrawObject(
@@ -3577,7 +3588,7 @@ namespace olc
 		vLayers[nTargetLayer].vecGPUTasks.push_back(task);
 	}
 
-	void olc::PixelGameEngine::HW3D_DrawObject_WithLighting(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const olc::Pixel tint, const std::array<float, 3>& lightPosition, const olc::Pixel lightColour)
+	void olc::PixelGameEngine::HW3D_DrawObject_extension(const std::array<float, 16>& matModelView, olc::Decal* decal, const olc::DecalStructure layout, const std::vector<std::array<float, 4>>& pos, const std::vector<std::array<float, 2>>& uv, const std::vector<olc::Pixel>& col, const olc::Pixel tint, olc::GPUTask_EXT GPUTaskExt)
 	{
 		GPUTask task;
 		task.decal = decal;
@@ -3587,8 +3598,7 @@ namespace olc
 		task.cull = nHW3DCullMode;
 		task.mvp = matModelView;
 		task.tint = tint;
-		task.haslightsource = 1;
-		task.lightposition = lightPosition;
+		task.pGPUTaslExt = &GPUTaskExt;
 		task.vb.resize(pos.size());
 
 		for (size_t i = 0; i < pos.size(); i++)
@@ -5786,6 +5796,11 @@ namespace olc
 		// John Galvin
 
 		uint32_t m_uniLightMode = 0;	// Used to select which lighting mode, directLight, pointLight, spotLight, noLight (default)
+		uint32_t m_uniEnableLight = 0;	// Used to enable / disable the Light GPU Task Exstension
+		uint32_t m_uniLightColour = 0;	// Used to apply the vec4 light colour
+		uint32_t m_uniLightLocation = 0;// Used to apply the vec3 light location
+		uint32_t m_uniEnableShadow = 0;	// Used to enable / disable the Shadow GPU Task Exstension
+		
 
 
 		// End John Galvin
@@ -5998,13 +6013,19 @@ namespace olc
 
 			// John Galvin
 			m_uniLightMode = locGetUniformLocation(m_nQuadShader, "lightmode");
+			m_uniEnableLight = locGetUniformLocation(m_nQuadShader, "enablelight");
+			m_uniLightColour = locGetUniformLocation(m_nQuadShader, "lightcolour");
+			m_uniEnableShadow = locGetUniformLocation(m_nQuadShader, "enableshadow");
 
 			locUniform1i(m_uniIs3D, 0);
 			locUniform1i(m_uniLightMode, 0);	// John Galvin
+			locUniform1i(m_uniEnableLight, 0);	// John Galvin
+			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
 
 			locUniformMatrix4fv(m_uniMVP, 16, false, matProjection.data());
 			float f[4] = { 100.0f, 100.0f, 100.0f, 100.0f };
-			locUniform4fv(m_uniTint, 4, f);
+			locUniform4fv(m_uniTint, 4, f); // Tint colour
+			locUniform4fv(m_uniLightColour, 4, f); // John Galvin Light Colour
 
 			// Create Quad
 			locGenBuffers(1, &m_vbQuad);
@@ -6105,6 +6126,7 @@ namespace olc
 			locBindVertexArray(m_vaQuad);
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
+			locUniform4fv(m_uniLightColour, 1, f); // John Galvin Light Colour
 
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
 			locVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(locVertex), 0); locEnableVertexAttribArray(0);
@@ -6113,7 +6135,9 @@ namespace olc
 #endif
 
 			locUniform1i(m_uniIs3D, 0);
-			locUniform1i(m_uniLightMode, 0); // John Galvin
+			locUniform1i(m_uniLightMode, 0);	// John Galvin
+			locUniform1i(m_uniEnableLight, 0);	// John Galvin
+			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
 			locUniformMatrix4fv(m_uniMVP, 1, false, matProjection.data());
 			glDisable(GL_CULL_FACE);
 			glDepthFunc(GL_LESS);
@@ -6151,9 +6175,13 @@ namespace olc
 			locBufferData(0x8892, sizeof(locVertex) * 4, verts, 0x88E0);
 
 			locUniform1i(m_uniIs3D, 0);
-			locUniform1i(m_uniLightMode, 0); // John Galvin
+			locUniform1i(m_uniLightMode, 0);	// John Galvin
+			locUniform1i(m_uniEnableLight, 0);	// John Galvin
+			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
+
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
+			locUniform4fv(m_uniLightColour, 1, f); // John Galvin Light Colour
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
 
@@ -6173,10 +6201,13 @@ namespace olc
 
 			locBufferData(0x8892, sizeof(locVertex) * decal.points, pVertexMem, 0x88E0);
 			locUniform1i(m_uniIs3D, 0);
-			locUniform1i(m_uniLightMode, 0); // John Galvin
+			locUniform1i(m_uniLightMode, 0);	// John Galvin
+			locUniform1i(m_uniEnableLight, 0);	// John Galvin
+			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
 
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
+			locUniform4fv(m_uniLightColour, 1, f); // John Galvin Light Colour
 
 			if (nDecalMode == DecalMode::WIREFRAME)
 				glDrawArrays(GL_LINE_LOOP, 0, decal.points);
@@ -6285,8 +6316,9 @@ namespace olc
 
 			// Use 3D Shader
 			locUniform1i(m_uniIs3D, 1);
-
-			locUniform1i(m_uniLightMode, 1); // John Galvin
+			locUniform1i(m_uniLightMode, 1);	// John Galvin
+			locUniform1i(m_uniEnableLight, 1);	// John Galvin
+			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
 
 			// Use MVP Matrix - yeah, but this needs to happen somewhere
 			// and at least its per object which makes sense
@@ -6302,6 +6334,19 @@ namespace olc
 
 			float f[4] = { float(task.tint.r) / 255.0f, float(task.tint.g) / 255.0f, float(task.tint.b) / 255.0f, float(task.tint.a) / 255.0f };
 			locUniform4fv(m_uniTint, 1, f);
+
+			if (task.pGPUTaslExt == nullptr)
+			{
+				locUniform4fv(m_uniLightColour, 1, f); // John Galvin Light Colour
+			}
+			else
+			{
+				float fLC[4] = { float(task.pGPUTaslExt->lightColour.r) / 255.0f, float(task.pGPUTaslExt->lightColour.g) / 255.0f, float(task.pGPUTaslExt->lightColour.b) / 255.0f, float(task.pGPUTaslExt->lightColour.a) / 255.0f };
+				locUniform4fv(m_uniLightColour, 1, fLC); // John Galvin Light Colour
+				
+			}
+			
+
 
 
 			if (task.cull == olc::CullMode::NONE)

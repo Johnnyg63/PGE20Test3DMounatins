@@ -15,6 +15,7 @@ layout (location = 3) in vec3 aNormal;
 out vec3 color;
 // Outputs the texture coordinates to the Fragment Shader
 out vec2 texCoord;
+
 // Outputs the normal for the Fragment Shader
 out vec3 Normal;
 
