@@ -6316,10 +6316,7 @@ namespace olc
 
 			// Use 3D Shader
 			locUniform1i(m_uniIs3D, 1);
-			locUniform1i(m_uniLightMode, 1);	// John Galvin
-			locUniform1i(m_uniEnableLight, 1);	// John Galvin
-			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
-
+			
 			// Use MVP Matrix - yeah, but this needs to happen somewhere
 			// and at least its per object which makes sense
 			std::array<float, 16> matMVP;
@@ -6341,6 +6338,13 @@ namespace olc
 			}
 			else
 			{
+				if (task.pGPUTaslExt->enableLight == true)
+				{
+					locUniform1i(m_uniLightMode, 1);	// John Galvin
+					locUniform1i(m_uniEnableLight, 1);	// John Galvin
+					locUniform1i(m_uniEnableShadow, 0);	// John Galvin
+				}
+				
 				float fLC[4] = { float(task.pGPUTaslExt->lightColour.r) / 255.0f, float(task.pGPUTaslExt->lightColour.g) / 255.0f, float(task.pGPUTaslExt->lightColour.b) / 255.0f, float(task.pGPUTaslExt->lightColour.a) / 255.0f };
 				locUniform4fv(m_uniLightColour, 1, fLC); // John Galvin Light Colour
 				

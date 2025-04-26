@@ -303,9 +303,10 @@ public:
         olc::GPUTask_EXT ext;
         ext.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
         ext.enableLight = true;
-        ext.lightColour == olc::YELLOW;
+        ext.lightColour = olc::RED;
         ext.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
+        //decLandScape
         HW3D_DrawObject_extension((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, olc::WHITE, ext);
 
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
