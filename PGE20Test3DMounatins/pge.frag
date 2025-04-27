@@ -14,11 +14,18 @@ uniform sampler2D sprTex1;
 uniform int lightmode;
 uniform int enablelight;
 uniform vec4 lightcolour;
+uniform vec3 lightposition;
 uniform int enableshadow;
 
 
-vec4 direcLight()
+vec4 diffuseLight()
 {
+
+	// diffuse lighting
+	vec3 normal = normalize(Normal);
+	vec3 lightDirection = normalize(lightposition - crntPos);
+	float diffuse = max(dot(normal, lightDirection), 0.0f);
+    diffuse = 0.20f;
 	return texture(sprTex, oTex) * oCol * lightcolour;
 }
 
@@ -29,8 +36,8 @@ void main()
     {
          switch (lightmode) 
         {
-            case 1: // directLight
-                pixel = direcLight();
+            case 1: // diffuseLight
+                pixel = diffuseLight();
                 break;
             case 2: // tba
             

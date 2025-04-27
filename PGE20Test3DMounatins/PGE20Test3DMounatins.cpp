@@ -36,11 +36,11 @@ public:
     olc::utils::hw3d::mesh meshMountain;
    
     olc::vf3d vf3dUp = { 0.0f, 1.0f, 0.0f };         // vf3d up direction
-    olc::vf3d vf3dCamera = { 5.0f, 5.0f, 40.0f };     // vf3d camera direction
+    olc::vf3d vf3dCamera = { -10.0f, 5.5f, 40.0f };     // vf3d camera direction
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
-    olc::vf3d vf3dOffset = { 5.0f, 5.0f, 40.0f };       // vf3d Offset
-    olc::vf3d vf3dSunLocation = { 480.0f, 40.0f, 1.0f };   // vf3d Sun Location
+    olc::vf3d vf3dOffset = { -10.0f, 5.5f, 40.0f };       // vf3d Offset
+    olc::vf3d vf3dSunLocation = { -10.0f, 5.5f, 15.0f };   // vf3d Sun Location
 
     olc::vf3d vf3dSanityCubeScale = { 2.0f, 2.0f, 2.0f };        // vf3d SanityCube Scale (in sort its Size)
     olc::vf3d vf3dSanityCubeLocation = { 10.0f, 0.0f, 0.0f };   // vf3d SanityCube Location 
@@ -55,8 +55,8 @@ public:
     olc::vf3d vf3dPyramidOffset = { 0.0f, 10.0f, 0.0f };    // vf3d Pyramid Offset
 
 
-    olc::vf3d vf3dSphereScale = { 10.0f, 10.0f, 10.0f };   // vf3d Sphere Scale (in sort its Size)
-    olc::vf3d vf3dSphereLocation = { 0.0f, 0.0f, 5.0f };   // vf3d Sphere Location 
+    olc::vf3d vf3dSphereScale = { 5.0f, 5.0f, 5.0f };   // vf3d Sphere Scale (in sort its Size)
+    olc::vf3d vf3dSphereLocation = { -10.0f, 5.5f, 15.0f };   // vf3d Sphere Location 
     olc::vf3d vf3dSphereOffset = { 0.0f, 0.0f, 0.0f };    // vf3d Sphere Offset
 
 
@@ -162,7 +162,7 @@ public:
         matSanityCube = olc::utils::hw3d::CreateSanityCube();
         matTriange = olc::utils::hw3d::CreateTriangle();
         matPyramid = olc::utils::hw3d::Create3SidedPyramid();
-        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::TOP_DOWN_VIEW);
+        mat4SPyramid = olc::utils::hw3d::Create4SidedPyramid(olc::utils::hw3d::SOLID_TEXTURE);
         matSphere = olc::utils::hw3d::CreateSphere();
         matSkyCube = olc::utils::hw3d::CreateCube(olc::utils::hw3d::LEFT_CROSS_TEXTURE_RECT_MAP);
         //matSkyCube = olc::utils::hw3d::CreateHW3DSkyCube();
@@ -172,11 +172,11 @@ public:
         renSkyCube.Load("assets/images/TestLarge.jpg");
         //renSkyCube.Load("assets/images/DaylightBoxUV.png");
         
-        //renBrick.Load("assets/images/Brick.png");
+        renBrick.Load("assets/images/Brick.png");
         //renBrick.Load("assets/images/GizaTest1.png");
-        renBrick.Load("assets/images/GizaHighRes.jpg");
+        //renBrick.Load("assets/images/GizaHighRes.jpg");
 
-        renEarth.Load("assets/images/WorldTextureHighRes.jpg");
+        renEarth.Load("assets/images/suntexture.jpg");
 
         Clear(olc::BLUE);
 
@@ -294,7 +294,7 @@ public:
         //HW3D_DrawSkyCube(mSkyCube.m, &sSkyCubeProps, matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
 
         // Draw Skycube first
-        HW3D_DrawObject((matWorld * mSkyCube).m, renSkyCube.Decal(), matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
+        //HW3D_DrawObject((matWorld * mSkyCube).m, renSkyCube.Decal(), matSkyCube.layout, matSkyCube.pos, matSkyCube.uv, matSkyCube.col);
         
         HW3D_DrawLine((matWorld).m, { 0.0f, 0.0f, 0.0f }, { 100.0f, 100.0f, 100.0f }, olc::RED);
 
@@ -304,18 +304,28 @@ public:
         ext.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
         ext.enableLight = true;
         ext.lightColour = olc::RED;
+        ext.lightmode = 1;
         ext.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
-        //decLandScape
-        HW3D_DrawObject_extension((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, olc::WHITE, ext);
+        olc::GPUTask_EXT ext1;
+        ext1.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
+        ext1.enableLight = true;
+        ext1.lightColour = olc::BLUE;
+        ext1.lightmode = 1;
+        ext1.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
+      
         // HW3D_DrawObject((matWorld * matCube).m, nullptr, matTriange.layout, matTriange.pos, matTriange.uv, matTriange.col);
 
         // HW3D_DrawObject((matWorld * mat3SPyrd).m, nullptr, matPyramid.layout, matPyramid.pos, matPyramid.uv, matPyramid.col);
 
-        HW3D_DrawObject_extension((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col, olc::WHITE, ext);
+        HW3D_DrawObject_extension((matWorld * matPyrd).m, renBrick.Decal(), mat4SPyramid.layout, mat4SPyramid.pos, mat4SPyramid.uv, mat4SPyramid.col, olc::WHITE, ext1, mat4SPyramid.norm);
 
-        //HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
+        HW3D_DrawObject((matWorld * matMSphere).m, renEarth.Decal(), matSphere.layout, matSphere.pos, matSphere.uv, matSphere.col);
+
+
+        //decLandScape
+        HW3D_DrawObject_extension((matWorld).m, decLandScape, meshMountain.layout, meshMountain.pos, meshMountain.uv, meshMountain.col, olc::WHITE, ext, meshMountain.norm);
 
         // renTestCube.Decal()
         //HW3D_DrawObject((matWorld * matCube).m, renTestCube.Decal(), matSanityCube.layout, matSanityCube.pos, matSanityCube.uv, matSanityCube.col);
