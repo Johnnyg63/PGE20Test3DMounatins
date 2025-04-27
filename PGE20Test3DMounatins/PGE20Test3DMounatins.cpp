@@ -303,14 +303,14 @@ public:
         olc::GPUTask_EXT ext;
         ext.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
         ext.enableLight = true;
-        ext.lightColour = olc::RED;
+        ext.lightColour = olc::WHITE;
         ext.lightmode = 1;
         ext.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
         olc::GPUTask_EXT ext1;
         ext1.cameraPosition = { Cam3D.GetPosition().x, Cam3D.GetPosition().y, Cam3D.GetPosition().z };
         ext1.enableLight = true;
-        ext1.lightColour = olc::BLUE;
+        ext1.lightColour = olc::WHITE;
         ext1.lightmode = 1;
         ext1.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
@@ -483,7 +483,12 @@ public:
         {
             vf3dSunLocation.x = float(GetMouseX());
             vf3dSunLocation.y = float(GetMouseY());
+           
         }
+
+        vf3dSphereLocation.x = vf3dSunLocation.x;
+        vf3dSphereLocation.y = vf3dSunLocation.y;
+        vf3dSphereLocation.z = vf3dSunLocation.z;
     }
 
     /*

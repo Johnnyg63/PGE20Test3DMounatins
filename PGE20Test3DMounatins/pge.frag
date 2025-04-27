@@ -23,10 +23,11 @@ vec4 diffuseLight()
 
 	// diffuse lighting
 	vec3 normal = normalize(Normal);
-	vec3 lightDirection = normalize(lightposition - crntPos);
+	vec3 lightDirection = normalize(lightposition);
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
-    diffuse = 0.20f;
-	return texture(sprTex, oTex) * oCol * lightcolour;
+    vec4 lightcolor = lightcolour * diffuse;
+
+	return texture(sprTex, oTex) * oCol * vec4(lightcolor.x, lightcolor.y, lightcolor.z, 1.0f);
 }
 
 void main()
