@@ -40,7 +40,7 @@ public:
     olc::vf3d vf3dLookDir = { 0.0f, 0.0f, 1.0f };    // vf3d look direction
     olc::vf3d vf3dForward = { 0.0f, 0.0f, 0.0f };    // vf3d Forward direction
     olc::vf3d vf3dOffset = { -10.0f, 5.5f, 40.0f };       // vf3d Offset
-    olc::vf3d vf3dSunLocation = { -10.0f, 5.5f, 15.0f };   // vf3d Sun Location
+    olc::vf3d vf3dSunLocation = { 100.0f, 100.0f, 100.0f };   // vf3d Sun Location
 
     olc::vf3d vf3dSanityCubeScale = { 2.0f, 2.0f, 2.0f };        // vf3d SanityCube Scale (in sort its Size)
     olc::vf3d vf3dSanityCubeLocation = { 10.0f, 0.0f, 0.0f };   // vf3d SanityCube Location 
@@ -56,7 +56,7 @@ public:
 
 
     olc::vf3d vf3dSphereScale = { 5.0f, 5.0f, 5.0f };   // vf3d Sphere Scale (in sort its Size)
-    olc::vf3d vf3dSphereLocation = { -10.0f, 5.5f, 15.0f };   // vf3d Sphere Location 
+    olc::vf3d vf3dSphereLocation = { 100.0f, 100.0f, 100.0f };   // vf3d Sphere Location 
     olc::vf3d vf3dSphereOffset = { 0.0f, 0.0f, 0.0f };    // vf3d Sphere Offset
 
 
@@ -486,9 +486,9 @@ public:
            
         }
 
-        vf3dSphereLocation.x = vf3dSunLocation.x;
+       /* vf3dSphereLocation.x = vf3dSunLocation.x;
         vf3dSphereLocation.y = vf3dSunLocation.y;
-        vf3dSphereLocation.z = vf3dSunLocation.z;
+        vf3dSphereLocation.z = vf3dSunLocation.z;*/
     }
 
     /*

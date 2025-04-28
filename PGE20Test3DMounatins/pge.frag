@@ -15,18 +15,20 @@ uniform int lightmode;
 uniform int enablelight;
 uniform vec4 lightcolour;
 uniform vec3 lightposition;
+uniform float ambientlight;
+
 uniform int enableshadow;
+
+
 
 
 vec4 diffuseLight()
 {
-
 	// diffuse lighting
 	vec3 normal = normalize(Normal);
 	vec3 lightDirection = normalize(lightposition);
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
-    vec4 lightcolor = lightcolour * diffuse;
-
+    vec4 lightcolor = lightcolour * (diffuse + ambientlight);
 	return texture(sprTex, oTex) * oCol * vec4(lightcolor.x, lightcolor.y, lightcolor.z, 1.0f);
 }
 
