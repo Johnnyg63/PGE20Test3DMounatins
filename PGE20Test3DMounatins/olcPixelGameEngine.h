@@ -1201,7 +1201,8 @@ namespace olc
 		olc::Pixel lightColour = olc::WHITE;						// Light Colour, Default: olc::WHITE
 		uint32_t lightmode = 0;										// Set the light mode
 		float ambientLight = 0.50f;									// Set the ambient light, default 0.50f
-
+		float specularLight = 0.0f;									// Set the specular Light, default 0.0f;
+ 
 		bool enableShadow = false;
 	};
 
@@ -5803,11 +5804,15 @@ namespace olc
 
 		// John Galvin
 
-		uint32_t m_uniLightMode = 0;	// Used to select which lighting mode, directLight, pointLight, spotLight, noLight (default)
-		uint32_t m_uniEnableLight = 0;	// Used to enable / disable the Light GPU Task Exstension
-		uint32_t m_uniLightColour = 0;	// Used to apply the vec4 light colour
-		uint32_t m_uniLightPosition = 0;// Used to apply the vec3 light position
-		uint32_t m_uniambientLight = 0;	// Used to apply ambient Lighting 
+		uint32_t m_uniLightMode = 0;		// Used to select which lighting mode, directLight, pointLight, spotLight, noLight (default)
+		uint32_t m_uniEnableLight = 0;		// Used to enable / disable the Light GPU Task Exstension
+		uint32_t m_uniLightColour = 0;		// Used to apply the vec4 light colour
+		uint32_t m_uniLightPosition = 0;	// Used to apply the vec3 light position
+		uint32_t m_uniAmbientLight = 0;		// Used to apply ambient lighting 
+		uint32_t m_uniSpecularLight = 0;	// Used to apply specular lighting
+
+		// Camera stuff
+		uint32_t m_uniCameraPosition = 0;	// Used to apply ambient Lighting 
 
 		// TODO Shadows
 		uint32_t m_uniEnableShadow = 0;	// Used to enable / disable the Shadow GPU Task Exstension
@@ -6031,7 +6036,9 @@ namespace olc
 			m_uniEnableLight = locGetUniformLocation(m_nQuadShader, "enablelight");
 			m_uniLightColour = locGetUniformLocation(m_nQuadShader, "lightcolour");
 			m_uniLightPosition = locGetUniformLocation(m_nQuadShader, "lightposition");
-			m_uniambientLight = locGetUniformLocation(m_nQuadShader, "ambientlight");
+			m_uniAmbientLight = locGetUniformLocation(m_nQuadShader, "ambientlight");
+			m_uniSpecularLight = locGetUniformLocation(m_nQuadShader, "specularlight");
+			m_uniCameraPosition = locGetUniformLocation(m_nQuadShader, "cameraposition");
 
 			m_uniEnableShadow = locGetUniformLocation(m_nQuadShader, "enableshadow");
 			
@@ -6040,7 +6047,8 @@ namespace olc
 			locUniform1i(m_uniLightMode, 0);		// John Galvin
 			locUniform1i(m_uniEnableLight, 0);		// John Galvin
 			locUniform1i(m_uniEnableShadow, 0);		// John Galvin
-			locUniform1f(m_uniambientLight, 0.0);
+			locUniform1f(m_uniAmbientLight, 0.0f);
+			locUniform1f(m_uniSpecularLight, 0.0f); 
 
 
 			locUniformMatrix4fv(m_uniMVP, 16, false, matProjection.data());
@@ -6048,8 +6056,9 @@ namespace olc
 			locUniform4fv(m_uniTint, 4, f); // Tint colour
 			
 
-			locUniform3f(m_uniLightPosition, 0.0f, 0.0f, 0.0f); // John Galvin : Light position
-			locUniform4fv(m_uniLightColour, 4, f); // John Galvin Light Colour
+			locUniform3f(m_uniLightPosition, 0.0f, 0.0f, 0.0f);		// John Galvin : Light position
+			locUniform4fv(m_uniLightColour, 4, f);					// John Galvin : Light Colour
+			locUniform3f(m_uniCameraPosition, 0.0f, 0.0f, 0.0f);	// John Galvin : Camera position
 
 			// Create Quad
 			locGenBuffers(1, &m_vbQuad);
@@ -6171,7 +6180,7 @@ namespace olc
 			locUniform1i(m_uniLightMode, 0);	// John Galvin
 			locUniform1i(m_uniEnableLight, 0);	// John Galvin
 			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
-			locUniform1f(m_uniambientLight, 0.0);
+			locUniform1f(m_uniAmbientLight, 0.0);
 			locUniformMatrix4fv(m_uniMVP, 1, false, matProjection.data());
 			glDisable(GL_CULL_FACE);
 			glDepthFunc(GL_LESS);
@@ -6213,7 +6222,7 @@ namespace olc
 			locUniform1i(m_uniLightMode, 0);	// John Galvin
 			locUniform1i(m_uniEnableLight, 0);	// John Galvin
 			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
-			locUniform1f(m_uniambientLight, 0.0);
+			locUniform1f(m_uniAmbientLight, 0.0);
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
 			
@@ -6242,7 +6251,7 @@ namespace olc
 			locUniform1i(m_uniLightMode, 0);	// John Galvin
 			locUniform1i(m_uniEnableLight, 0);	// John Galvin
 			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
-			locUniform1f(m_uniambientLight, 0.0);
+			locUniform1f(m_uniAmbientLight, 0.0);
 
 			float f[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			locUniform4fv(m_uniTint, 1, f);
@@ -6377,16 +6386,22 @@ namespace olc
 			locUniform1i(m_uniEnableShadow, 0);	// John Galvin
 			locUniform3f(m_uniLightPosition, 0.0f, 0.0f, 0.0f); // John Galvin : Light position
 			locUniform4f(m_uniLightColour, 0.0f, 0.0f, 0.0f, 0.0f); // John Galvin Light Colour
+			locUniform1f(m_uniAmbientLight, 0.0f);
+			locUniform1f(m_uniSpecularLight, 0.0f);
 
 			if (task.GPUTaskExt.enableLight == true)
 			{
-				locUniform1i(m_uniEnableLight, 1);							// John Galvin
-				locUniform1i(m_uniLightMode, task.GPUTaskExt.lightmode);	// John Galvin
-				locUniform1i(m_uniEnableShadow, 0);							// John Galvin
-				locUniform1f(m_uniambientLight, task.GPUTaskExt.ambientLight);
+				locUniform1i(m_uniEnableLight, 1);								// John Galvin
+				locUniform1i(m_uniLightMode, task.GPUTaskExt.lightmode);		// John Galvin
+				locUniform1i(m_uniEnableShadow, 0);								// John Galvin
+				locUniform1f(m_uniAmbientLight, task.GPUTaskExt.ambientLight);
+				locUniform1f(m_uniSpecularLight, task.GPUTaskExt.specularLight);
+				
 				float fLC[4] = { float(task.GPUTaskExt.lightColour.r) / 255.0f, float(task.GPUTaskExt.lightColour.g) / 255.0f, float(task.GPUTaskExt.lightColour.b) / 255.0f, float(task.GPUTaskExt.lightColour.a) / 255.0f };
 				locUniform4fv(m_uniLightColour, 1, fLC); // John Galvin Light Colour
 				locUniform3f(m_uniLightPosition, task.GPUTaskExt.lightPosition[0], task.GPUTaskExt.lightPosition[1], task.GPUTaskExt.lightPosition[2]); // John Galvin : Light position
+
+				locUniform3f(m_uniCameraPosition, task.GPUTaskExt.cameraPosition[0], task.GPUTaskExt.cameraPosition[1], task.GPUTaskExt.cameraPosition[2]); // John Galvin : Light position
 
 
 			}

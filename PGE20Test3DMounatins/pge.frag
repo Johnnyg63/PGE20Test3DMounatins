@@ -15,20 +15,28 @@ uniform int lightmode;
 uniform int enablelight;
 uniform vec4 lightcolour;
 uniform vec3 lightposition;
+uniform vec3 cameraposition;
 uniform float ambientlight;
+uniform float specularlight;
 
 uniform int enableshadow;
-
-
 
 
 vec4 diffuseLight()
 {
 	// diffuse lighting
 	vec3 normal = normalize(Normal);
-	vec3 lightDirection = normalize(lightposition);
+	vec3 lightDirection = normalize(lightposition - cameraposition);
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
-    vec4 lightcolor = lightcolour * (diffuse + ambientlight);
+
+    // specular lighting
+	vec3 viewDirection = normalize(cameraposition - crntPos);
+	vec3 reflectionDirection = reflect(-lightDirection, normal);
+	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 16);
+	float specular = specAmount * specularlight;
+
+
+    vec4 lightcolor = lightcolour * (diffuse + ambientlight + specular);
 	return texture(sprTex, oTex) * oCol * vec4(lightcolor.x, lightcolor.y, lightcolor.z, 1.0f);
 }
 

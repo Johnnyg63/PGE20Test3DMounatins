@@ -305,6 +305,8 @@ public:
         ext.enableLight = true;
         ext.lightColour = olc::WHITE;
         ext.lightmode = 1;
+        ext.ambientLight = 0.50f;
+        ext.specularLight = 0.5f;
         ext.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
         olc::GPUTask_EXT ext1;
@@ -312,6 +314,8 @@ public:
         ext1.enableLight = true;
         ext1.lightColour = olc::WHITE;
         ext1.lightmode = 1;
+        ext1.ambientLight = 0.20f;
+        ext1.specularLight = 5.0f;
         ext1.lightPosition = { vf3dSunLocation.x, vf3dSunLocation.y, vf3dSunLocation.z };
 
       
