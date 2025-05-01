@@ -22,7 +22,7 @@ uniform float specularlight;
 uniform int enableshadow;
 
 
-vec4 diffuseLight()
+vec4 directLight()
 {
 	// diffuse lighting
 	vec3 normal = normalize(Normal);
@@ -40,6 +40,20 @@ vec4 diffuseLight()
 	return texture(sprTex, oTex) * oCol * vec4(lightcolor.x, lightcolor.y, lightcolor.z, 1.0f);
 }
 
+
+vec4 pointLight()
+{
+    return texture(sprTex, oTex) * oCol;
+}
+
+vec4 spotLight()
+{
+    return texture(sprTex, oTex) * oCol;
+}
+
+
+
+
 void main()
 {
 
@@ -47,12 +61,14 @@ void main()
     {
          switch (lightmode) 
         {
-            case 1: // diffuseLight
-                pixel = diffuseLight();
+            case 1: 
+                pixel = directLight();
                 break;
-            case 2: // tba
-            
+            case 2:
+                pixel = pointLight();
                 break;
+            case 3: 
+                pixel = spotLight();
             case 0: // no light
             default:
                 pixel = texture(sprTex, oTex) * oCol;
